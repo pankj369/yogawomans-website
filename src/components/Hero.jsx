@@ -1,18 +1,17 @@
 import { motion } from "framer-motion";
+import heroImage from "../assests/images/hero-image.png";
 
 function Hero() {
   return (
     <section
       id="home"
       className="relative flex min-h-screen items-center bg-cover bg-center bg-no-repeat"
-      style={{
-        backgroundImage:
-          "linear-gradient(120deg, rgba(8, 30, 54, 0.7), rgba(14, 57, 99, 0.45), rgba(19, 67, 45, 0.35)), url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1600&q=80')"
-      }}
-    >
+  style={{backgroundImage: `url(${heroImage})`
+}}
+>
       <div className="absolute inset-0 bg-hero-gradient" />
       <div className="section-container relative z-10 py-28">
-        <div className="max-w-2xl glass-card p-6 sm:p-10">
+        <div className="max-w-2xl  p-6 sm:p-10">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

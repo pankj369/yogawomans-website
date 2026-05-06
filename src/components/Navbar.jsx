@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
+import logo from "../assests/images/logo.png";
 
 const links = [
   { label: "Home", href: "#home" },
@@ -26,16 +27,24 @@ function Navbar() {
           : "bg-transparent"
       }`}
     >
-      <nav className="section-container flex h-20 items-center justify-between gap-4" aria-label="Main navigation">
-        <a href="#home" className="flex items-center gap-2">
-          <span className="rounded-full bg-primaryBlue px-3 py-1 font-heading text-sm font-extrabold tracking-[0.2em] text-white">
-            YOGA
-          </span>
+      <nav
+        className="section-container flex h-20 items-center justify-between gap-4"
+        aria-label="Main navigation"
+      >
+        {/* Logo */}
+        <a href="#home" className="flex items-center gap-3">
+          <img
+            src={logo}
+            alt="YogaWomans Logo"
+            className="h-16 w-auto object-contain"
+          />
+
           <span className="hidden text-xs font-heading font-medium uppercase tracking-[0.14em] text-white md:block">
             Why should all superheroes be men?
           </span>
         </a>
 
+        {/* Desktop Menu */}
         <ul className="hidden items-center gap-6 md:flex">
           {links.map((link) => (
             <li key={link.label}>
@@ -49,6 +58,7 @@ function Navbar() {
           ))}
         </ul>
 
+        {/* Desktop Buttons */}
         <div className="hidden items-center gap-3 md:flex">
           <a
             href="/login"
@@ -56,6 +66,7 @@ function Navbar() {
           >
             Login
           </a>
+
           <a
             href="/subscription"
             className="rounded-full bg-primaryOrange px-5 py-2 text-sm font-heading font-bold text-white shadow-soft transition hover:-translate-y-0.5"
@@ -64,6 +75,7 @@ function Navbar() {
           </a>
         </div>
 
+        {/* Mobile Menu Button */}
         <button
           type="button"
           className="rounded-full border border-white/60 p-2 text-white md:hidden"
@@ -74,6 +86,7 @@ function Navbar() {
         </button>
       </nav>
 
+      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="section-container pb-4 md:hidden">
           <div className="glass-card p-4">
@@ -90,11 +103,19 @@ function Navbar() {
                 </li>
               ))}
             </ul>
+
             <div className="mt-4 flex gap-3">
-              <a href="/login" className="rounded-full border border-primaryBlue px-4 py-2 text-sm font-heading text-primaryBlue">
+              <a
+                href="/login"
+                className="rounded-full border border-primaryBlue px-4 py-2 text-sm font-heading text-primaryBlue"
+              >
                 Login
               </a>
-              <a href="/subscription" className="rounded-full bg-primaryOrange px-4 py-2 text-sm font-heading text-white">
+
+              <a
+                href="/subscription"
+                className="rounded-full bg-primaryOrange px-4 py-2 text-sm font-heading text-white"
+              >
                 Upgrade
               </a>
             </div>
