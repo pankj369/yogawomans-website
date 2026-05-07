@@ -77,7 +77,7 @@ if (!document.head.querySelector("[data-pricing]")) {
     .pr-section {
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(180deg, #fff 0%, #f6fbf3 100%);
-      padding: 90px 40px;
+      padding: 90px 28px;
       position: relative;
       overflow: hidden;
     }

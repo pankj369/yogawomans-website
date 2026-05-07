@@ -14,7 +14,7 @@ if (!document.head.querySelector("[data-yoga-why]")) {
     .yw-section {
       font-family:'Poppins',sans-serif;
       background:linear-gradient(180deg,#1A2E1A 0%,#0f1f0f 100%);
-      padding:90px 40px;position:relative;overflow:hidden;
+      padding:90px 28px;position:relative;overflow:hidden;
     }
 
     .yw-orb {

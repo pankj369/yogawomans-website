@@ -14,10 +14,10 @@ function Hero() {
       }}
     >
       {/* Overlay */}
-      <div className="absolute " />
+      {/* <div className="absolute inset-0 bg-[#f5dcc0]/55" /> */}
 
       {/* Main Container */}
-      <div className="section-container relative z-10 flex min-h-screen flex-col px-4 pt-24">
+      <div className="section-container relative z-10 flex min-h-screen flex-col px-3 pt-24">
 
         {/* Hero Content */}
         <div className="grid flex-1 items-center gap-4 lg:grid-cols-2">
@@ -27,58 +27,68 @@ function Hero() {
 
             {/* Heading */}
             <motion.h1
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="
-              font-heading
-              font-extrabold
-              leading-[0.9]
+  initial={{ opacity: 0, y: 25 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8 }}
+  className="
+  font-heading
+  font-extrabold
+  leading-[0.9]
 
-              text-[2.5rem]
-              sm:text-[3.2rem]
-              md:text-[4rem]
-              lg:text-[5rem]
-              xl:text-[5.8rem]
-              "
-            >
+  [paint-order:stroke_fill]
+  [-webkit-text-stroke:1.5px_rgba(255,255,255,0.9)]
 
-              <span className="block text-primaryBlue">
-                Find Balance.
-              </span>
+  drop-shadow-[0_5px_15px_rgba(0,0,0,0.25)]
 
-              <span className="block text-primaryOrange">
-                Inner Peace.
-              </span>
+  text-[2.5rem]
+  sm:text-[3.2rem]
+  md:text-[4rem]
+  lg:text-[5rem]
+  xl:text-[5.8rem]
+  "
+>
 
-              <span className="block text-primaryGreen">
-                Better You.
-              </span>
+  <span className="block text-primaryBlue">
+    Find Balance.
+  </span>
 
-            </motion.h1>
+  <span className="block text-primaryOrange">
+    Inner Peace.
+  </span>
+
+  <span className="block text-primaryGreen">
+    Better You.
+  </span>
+
+</motion.h1>
 
             {/* Paragraph */}
             <motion.p
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="
-              mx-auto
-              mt-4
-              max-w-xl
-              text-sm
-              leading-relaxed
-              text-grayText
+  initial={{ opacity: 0, y: 18 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, delay: 0.2 }}
+  className="
+  mx-auto
+  mt-4
+  max-w-xl
 
-              sm:text-base
-              md:text-lg
-              lg:mx-0
-              "
-            >
-              Yoga and meditation for a healthier body,
-              calmer mind, and happier life.
-            </motion.p>
+  text-sm
+  leading-relaxed
 
+  text-white
+
+  drop-shadow-[0_3px_10px_rgba(0,0,0,0.35)]
+
+  sm:text-base
+  md:text-lg
+  lg:mx-0
+  "
+>
+
+  Yoga and meditation for a healthier body,
+  calmer mind, and happier life.
+
+</motion.p>
             {/* Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 18 }}

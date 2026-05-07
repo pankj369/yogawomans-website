@@ -49,7 +49,7 @@ if (!document.head.querySelector("[data-faq]")) {
     .faq-section {
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(180deg, #f6fbf3 0%, #fff 100%);
-      padding: 90px 40px;
+      padding: 90px 28px;
       position: relative;
     }
     .faq-inner { max-width: 780px; margin: 0 auto; }

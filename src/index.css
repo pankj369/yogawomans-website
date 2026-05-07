@@ -14,7 +14,7 @@ body {
 }
 
 .section-container {
-  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  @apply mx-auto w-full max-w-[92rem] px-2 sm:px-4 lg:px-5;
 }
 
 .glass-card {
@@ -46,4 +46,11 @@ body {
 
 .animate-slideLeft {
   animation: slideLeft 0.35s ease;
+}
+.yc-card-image{
+  transition:transform 0.35s ease;
+}
+
+.yc-card:hover .yc-card-image{
+  transform:scale(1.04);
 }

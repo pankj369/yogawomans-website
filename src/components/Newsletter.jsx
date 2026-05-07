@@ -26,7 +26,7 @@ if (!document.head.querySelector("[data-newsletter]")) {
 
     .nl-section {
       font-family: 'Poppins', sans-serif;
-      padding: 90px 40px;
+      padding: 90px 28px;
       background: linear-gradient(180deg, #fff 0%, #f6fbf3 100%);
       position: relative;
       overflow: hidden;

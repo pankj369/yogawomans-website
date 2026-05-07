@@ -187,7 +187,7 @@ const styles = {
   section: {
     fontFamily: "'Poppins', sans-serif",
     background: "linear-gradient(180deg, #f0f7e6 0%, #ffffff 100%)",
-    padding: "80px 40px",
+    padding: "80px 28px",
     textAlign: "center",
     position: "relative",
     overflow: "hidden",

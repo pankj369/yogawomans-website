@@ -47,7 +47,7 @@ function Footer() {
   return (
     <footer id="footer" className="bg-[#1A2E1A] font-body text-[#CCCCCC]">
 
-      <div className="section-container px-4 pb-0 pt-20 sm:pt-24">
+      <div className="section-container px-3 pb-0 pt-20 sm:pt-24">
 
         {/* Top Footer Grid */}
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-xl sm:p-8 lg:p-10">
@@ -300,7 +300,7 @@ function Footer() {
         </div>
 
         {/* Bottom Copyright Strip */}
-        <div className="mt-10 border-t border-[#2E4A2E] bg-[#111F11]/80 px-4 py-5">
+        <div className="mt-10 border-t border-[#2E4A2E] bg-[#111F11]/80 px-3 py-5">
 
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 text-center text-xs text-[#999999] md:flex-row md:text-left">
 
