@@ -1,5 +1,6 @@
 // src/components/Pricing.jsx
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const plans = [
   {
@@ -247,12 +248,13 @@ export default function Pricing() {
                   </li>
                 ))}
               </ul>
-              <button
+              <Link
+                to="/auth"
                 className={`pr-cta-btn ${plan.popular ? "primary" : "secondary"}`}
-                type="button"
+                style={{display: 'inline-block'}}
               >
                 {plan.cta}
-              </button>
+              </Link>
             </div>
           ))}
         </div>

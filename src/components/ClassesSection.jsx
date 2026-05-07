@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 if (!document.head.querySelector("[data-yoga-classes]")) {
   const s = document.createElement("style");
@@ -180,7 +181,7 @@ export default function ClassesSection() {
     : classes.filter((c) => c.filter === activeFilter);
 
   return (
-    <section className="yc-section">
+    <section id="classes"  className="yc-section">
       <div className="yc-bg-pattern" aria-hidden="true" />
       <div className="yc-inner">
 
@@ -228,16 +229,16 @@ export default function ClassesSection() {
                   <span className="yc-meta-tag">⏱ {cls.duration}</span>
                   <span className="yc-meta-tag">🌤 {cls.time}</span>
                 </div>
-                <button className="yc-enroll-btn">Enroll Now</button>
+                <Link to="/auth" className="yc-enroll-btn" style={{display: 'inline-block'}}>Enroll Now</Link>
               </div>
             </div>
           ))}
         </div>
 
         <div className="yc-cta-wrap">
-          <button className="yc-cta-btn">
+          <Link to="/auth" className="yc-cta-btn" style={{display: 'inline-block'}}>
             View All Classes →
-          </button>
+          </Link>
         </div>
       </div>
     </section>

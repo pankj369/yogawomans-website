@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const solutions = [
   {
@@ -457,7 +458,8 @@ export default function FindSolution() {
       )}
 
       {/* CTA Button */}
-      <button
+      <Link
+        to="/auth"
         style={{
           ...styles.ctaBtn,
           ...(ctaHovered
@@ -467,12 +469,13 @@ export default function FindSolution() {
                 boxShadow: "0 8px 20px rgba(232,101,26,0.3)",
               }
             : {}),
+          display: 'inline-block'
         }}
         onMouseEnter={() => setCtaHovered(true)}
         onMouseLeave={() => setCtaHovered(false)}
       >
         🧘 Explore All Classes
-      </button>
+      </Link>
     </section>
   );
 }

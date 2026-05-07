@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 import herobg from "../assests/images/herobg.png";
 import hero from "../assests/images/hero.png";
@@ -13,7 +14,7 @@ function Hero() {
       }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-[#f5dcc0]/55" />
+      <div className="absolute " />
 
       {/* Main Container */}
       <div className="section-container relative z-10 flex min-h-screen flex-col px-4 pt-24">
@@ -95,12 +96,12 @@ function Hero() {
               "
             >
 
-              <a
-                href="#discover"
+              <Link
+                to="/auth"
                 className="
                 rounded-full
                 bg-primaryOrange
-                px-6
+                px-7
                 py-3
                 font-heading
                 text-sm
@@ -113,7 +114,7 @@ function Hero() {
                 "
               >
                 Explore Classes
-              </a>
+              </Link>
 
               <a
                 href="#about"

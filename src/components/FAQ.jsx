@@ -1,5 +1,6 @@
 // src/components/FAQ.jsx
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const faqs = [
   {
@@ -181,9 +182,9 @@ export default function FAQ() {
 
         <div className="faq-footer">
           <p>Aur koi sawaal hai? Hum help karne ke liye yahan hain! 🙏</p>
-          <button className="faq-contact-btn" type="button">
+          <Link to="/auth" className="faq-contact-btn" style={{display: 'inline-block'}}>
             💬 Chat With Us
-          </button>
+          </Link>
         </div>
       </div>
     </section>

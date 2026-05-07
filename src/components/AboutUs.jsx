@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import CountUp from "react-countup";
 import sacredimage from "../assests/images/sacredimage.png";
 
@@ -557,10 +558,10 @@ export default function AboutUs() {
             ))}
           </div>
 
-          <button className="yoga-cta-btn" type="button">
+          <Link to="/auth" className="yoga-cta-btn" style={{display: 'inline-block'}}>
             Discover Our Story
             <span className="arrow" aria-hidden="true">→</span>
-          </button>
+          </Link>
 
           <div className="yoga-trust-grid">
             {trustBadges.map((badge) => (
