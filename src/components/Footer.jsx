@@ -13,8 +13,7 @@ import {
   HiOutlinePhone
 } from "react-icons/hi2";
 
-import logo from "../assests/images/logo.png";
-
+import fotlogo from "../assests/images/fotlogo.png";
 const quickLinks = [
   "Home",
   "About Us",
@@ -58,14 +57,40 @@ function Footer() {
             {/* Column 1 - Brand */}
             <div className="lg:col-span-1">
 
-              <a
-                href="#home"
-                aria-label="YOGAWOMANS home"
-                className="inline-flex items-center rounded-2xl border border-[#E8651A]/30 bg-white/10 px-2  backdrop-blur-md transition duration-300 hover:scale-[1.02] hover:border-[#E8651A]"
-              >
-                <img src={logo} alt="YOGAWOMANS logo" className="h-18 w-auto" />
-              </a>
+<a
+  href="#home"
+  aria-label="YOGAWOMANS home"
+  className="
+    inline-flex
+    items-center
+    rounded-2xl
+    border
+    border-[#E8651A]/30
+    bg-white/10
+    px-4
+    py-3
+    backdrop-blur-md
+    transition
+    duration-300
+    hover:scale-[1.02]
+    hover:border-[#E8651A]
+  "
+>
 
+  <img
+    src={fotlogo}
+    alt="YOGAWOMANS Logo"
+    className="
+      h-12
+      w-auto
+      object-contain
+
+      sm:h-14
+      md:h-16
+    "
+  />
+
+</a>
               <p className="mt-5 font-heading text-xs uppercase tracking-[0.35em] text-white/80">
                 Body • Mind • Soul
               </p>

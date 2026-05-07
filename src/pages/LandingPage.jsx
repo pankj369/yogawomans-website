@@ -1,10 +1,14 @@
+// src/pages/LandingPage.jsx
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
-import Slider from "../components/Slider";
-import Programs from "../components/Programs";
-import About from "../components/About";
+import AboutUs from "../components/AboutUs";  
+import WhyChooseUs from "../components/WhyChooseUs";
+import Instructors from "../components/Instructors";  
+import ClassesSection from "../components/ClassesSection";
+import Pricing from "../components/Pricing";        
+import FindSolution from "../components/FindSolution";
 import Testimonials from "../components/Testimonials";
-import Events from "../components/Events";
+// import FAQ from "../components/FAQ";                   // ✅ NEW
 import Footer from "../components/Footer";
 
 function LandingPage() {
@@ -12,16 +16,37 @@ function LandingPage() {
     <div className="overflow-x-hidden">
       <Navbar />
       <main>
+        {/* 1. HOOK — pehli impression */}
         <Hero />
-        <Slider />
-        <Programs />
-        <About />
+
+        {/* 2. PROBLEM-SOLUTION — pain points address karo */}
+        <FindSolution />
+
+        {/* 3. CLASSES — detail mein offering */}
+        <ClassesSection />
+        {/* 4. TEAM — human face = trust */}
+        <Instructors />
+        
+        {/* 5. WHO WE ARE — brand story + credibility */}
+        <AboutUs />
+
+        {/* 6. WHY US — competitors se alag kyun hain */}
+        <WhyChooseUs />
+
+
+        {/* 7. PRICING — ab user convince ho chuka hai */}
+        <Pricing />
+
+
+        {/* 8. TESTIMONIALS — real reviews before final CTA */}
         <Testimonials />
-        <Events />
+
+
       </main>
+      {/* 8. Footer  */}
       <Footer />
     </div>
   );
 }
 
-export default  LandingPage;
+export default LandingPage;
