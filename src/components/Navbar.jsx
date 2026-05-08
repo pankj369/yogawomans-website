@@ -1,154 +1,186 @@
-import { useEffect, useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { useState } from "react";
+import { FaBars, FaTimes, FaHome } from "react-icons/fa";
+import { GiLotus } from "react-icons/gi";
+import { MdEventAvailable } from "react-icons/md";
+import { FiShoppingBag } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 import navlogo from "../assests/images/navlogo.png";
 
 const links = [
-  { label: "Home", href: "#home" },
-  { label: "Discover Yoga", href: "#discover" },
-  { label: "Live Schedules", href: "#events" },
-  { label: "Shop", href: "#footer" }
+  {
+    label: "Home",
+    href: "#home",
+    icon: <FaHome />,
+  },
+  {
+    label: "Discover Yoga",
+    href: "#discover",
+    icon: <GiLotus />,
+  },
+  {
+    label: "Live Schedules",
+    href: "#events",
+    icon: <MdEventAvailable />,
+  },
+  {
+    label: "Shop",
+    href: "#footer",
+    icon: <FiShoppingBag />,
+  },
 ];
 
 function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [heroHeight, setHeroHeight] = useState(0);
-
-  useEffect(() => {
-    const heroSection = document.getElementById("home");
-    if (heroSection) {
-      setHeroHeight(heroSection.offsetHeight);
-    }
-  }, []);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const isPastHero = window.scrollY > heroHeight;
-      setIsScrolled(isPastHero);
-    };
-
-    window.addEventListener("scroll", onScroll);
-
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [heroHeight]);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "border-b border-white/20 bg-transparent backdrop-blur-xl"
-          : "bg-white"
-      }`}
-    >
+    <header className="fixed top-4 left-0 w-full z-50 px-4">
+
       <nav
-        className="section-container flex h-20 items-center justify-between"
-        aria-label="Main navigation"
+        className="
+        mx-auto
+        max-w-[1450px]
+
+        rounded-[32px]
+
+        border border-[#d8ccb8]
+
+        bg-[#f7f1e8]/95
+        backdrop-blur-xl
+
+        shadow-[0_10px_40px_rgba(0,0,0,0.08)]
+
+        px-6
+        lg:px-10
+
+        h-[88px]
+
+        flex
+        items-center
+        justify-between
+        "
       >
 
-        {/* LEFT */}
-        <div className="flex items-center gap-3">
+        {/* LEFT LOGO */}
+        <a href="#home" className="flex items-center gap-3">
 
-          {/* Logo */}
-          <a href="#home" className="flex items-center">
-            <img
-              src={navlogo}
-              alt="YogaWomans Logo"
+          <img
+            src={navlogo}
+            alt="logo"
+            className="h-14 w-auto object-contain"
+          />
+
+          <div className="hidden sm:block">
+            <h2
               className="
-              relative
-              top-1
-            
-              block
-              h-14
-              w-auto
-              object-contain
-              align-middle
-
-              sm:h-16
-              md:h-[72px]
+              text-[34px]
+              leading-none
+              font-serif
+              text-[#5d6f3d]
               "
-            />
-          </a>
+            >
+              YOGA
+            </h2>
 
-          {/* Tagline */}
-          <span
-            className={`
-            hidden
-            xl:block
+            <p
+              className="
+              text-[11px]
+              tracking-[0.28em]
+              uppercase
+              text-[#c17b42]
+              "
+            >
+              Balance Within
+            </p>
+          </div>
 
-            text-xs
-            font-heading
-            font-medium
-            uppercase
-            tracking-[0.14em]
-            transition-colors
-            ${isScrolled ? "text-white" : "text-gray-700"}
-            `}
-          >
-            Why should all superheroes be men?
-          </span>
-
-        </div>
+        </a>
 
         {/* DESKTOP MENU */}
         <ul
           className="
           hidden
-          items-center
-
-          gap-4
           lg:flex
-          xl:gap-6
+          items-center
+          gap-10
           "
         >
-          {links.map((link) => (
-            <li key={link.label}>
+
+          {links.map((link, index) => (
+
+            <li key={link.label} className="relative group">
+
               <a
                 href={link.href}
-                className={`
-                font-heading
-                text-[11px]
+                className="
+                flex
+                items-center
+                gap-2
+
+                text-[17px]
                 font-medium
-                uppercase
-                tracking-[0.2em]
-                transition-colors
-                ${isScrolled ? "text-white hover:text-primaryOrange" : "text-gray-800 hover:text-primaryOrange"}
-                `}
+                text-[#4d3928]
+
+                transition-all
+                duration-300
+
+                hover:text-[#6f8b4e]
+                "
               >
+
+                <span className="text-[18px]">
+                  {link.icon}
+                </span>
+
                 {link.label}
+
               </a>
+
+              {index === 0 && (
+                <div
+                  className="
+                  absolute
+                  left-0
+                  -bottom-3
+
+                  h-[3px]
+                  w-full
+
+                  rounded-full
+                  bg-[#7a684f]
+                  "
+                />
+              )}
+
             </li>
+
           ))}
+
         </ul>
 
         {/* RIGHT BUTTONS */}
-        <div
-          className="
-          hidden
-          items-center
-          gap-3
-
-          lg:flex
-          "
-        >
+        <div className="hidden lg:flex items-center gap-4">
 
           <Link
             to="/login"
-            className={`
+            className="
             rounded-full
+
             border
-            px-5
-            py-2
-            text-sm
-            font-heading
+            border-[#9e987f]
+
+            px-7
+            py-3
+
+            text-[17px]
             font-medium
+            text-[#3d3125]
+
             transition-all
-            ${isScrolled 
-              ? "border-white/70 text-white hover:bg-white/15" 
-              : "border-gray-800 text-gray-800 hover:bg-gray-100"
-            }
-            `}
+            duration-300
+
+            hover:bg-[#ebe2d5]
+            "
           >
             Login
           </Link>
@@ -157,16 +189,23 @@ function Navbar() {
             to="/auth"
             className="
             rounded-full
-            bg-primaryOrange
-            px-5
-            py-2
-            text-sm
-            font-heading
-            font-bold
+
+            bg-[#667f42]
+
+            px-8
+            py-3
+
+            text-[17px]
+            font-semibold
             text-white
-            shadow-soft
-            transition
-            hover:-translate-y-0.5
+
+            shadow-lg
+
+            transition-all
+            duration-300
+
+            hover:scale-105
+            hover:bg-[#587037]
             "
           >
             Upgrade
@@ -176,25 +215,23 @@ function Navbar() {
 
         {/* MOBILE BUTTON */}
         <button
-          type="button"
-          className={`
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="
+          lg:hidden
+
+          h-11
+          w-11
+
+          rounded-full
+
+          bg-[#ede3d5]
+
           flex
-          h-10
-          w-10
           items-center
           justify-center
-          rounded-full
-          border
-          transition-colors
-          ${isScrolled
-            ? "border-white/60 text-white"
-            : "border-gray-800 text-gray-800"
-          }
 
-          lg:hidden
-          `}
-          aria-label="Toggle menu"
-          onClick={() => setIsMenuOpen((prev) => !prev)}
+          text-[#3d3125]
+          "
         >
           {isMenuOpen ? <FaTimes /> : <FaBars />}
         </button>
@@ -202,143 +239,104 @@ function Navbar() {
       </nav>
 
       {/* MOBILE MENU */}
-{/* MOBILE MENU */}
-{isMenuOpen && (
+      {isMenuOpen && (
 
-  <div
-    className="
-    fixed
-    inset-0
-    z-[999]
-    bg-black/40
-    backdrop-blur-[2px]
-    lg:hidden
-    "
-    onClick={() => setIsMenuOpen(false)}
-  >
-
-    {/* SIDEBAR */}
-    <div
-
-      onClick={(e) => e.stopPropagation()}
-
-      className="
-      absolute
-      right-0
-      top-0
-
-      h-screen
-      w-[80%]
-      max-w-[340px]
-
-      bg-[#f6f1ec]
-      shadow-2xl
-
-      px-6
-      py-8
-
-      animate-slideLeft
-      "
-    >
-
-      {/* TOP */}
-      <div className="mb-10 flex items-center justify-between">
-
-        <img
-          src={navlogo}
-          alt="YogaWomans Logo"
-          className="h-14 w-auto object-contain"
-        />
-
-        <button
-          onClick={() => setIsMenuOpen(false)}
+        <div
           className="
-          flex
-          h-10
-          w-10
-          items-center
-          justify-center
-          rounded-full
-          border
-          border-black/20
-          text-black
+          lg:hidden
+
+          mt-4
+
+          rounded-[28px]
+
+          border border-[#d9ccb8]
+
+          bg-[#f7f1e8]
+
+          shadow-2xl
+
+          p-6
           "
         >
-          <FaTimes />
-        </button>
 
-      </div>
+          <ul className="space-y-6">
 
-      {/* LINKS */}
-      <ul className="space-y-7">
+            {links.map((link) => (
 
-        {links.map((link) => (
-          <li key={link.label}>
+              <li key={link.label}>
 
-            <a
-              href={link.href}
-              onClick={() => setIsMenuOpen(false)}
+                <a
+                  href={link.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="
+                  flex
+                  items-center
+                  gap-3
+
+                  text-[18px]
+                  font-medium
+                  text-[#4d3928]
+                  "
+                >
+
+                  <span>
+                    {link.icon}
+                  </span>
+
+                  {link.label}
+
+                </a>
+
+              </li>
+
+            ))}
+
+          </ul>
+
+          <div className="mt-8 flex gap-3">
+
+            <Link
+              to="/login"
               className="
-              block
-              font-heading
-              text-sm
-              font-semibold
-              uppercase
-              tracking-[0.18em]
-              text-darkText
-              transition
-              hover:text-primaryOrange
+              flex-1
+
+              rounded-full
+
+              border border-[#a69b86]
+
+              py-3
+
+              text-center
+              text-[#3d3125]
               "
             >
-              {link.label}
-            </a>
+              Login
+            </Link>
 
-          </li>
-        ))}
+            <Link
+              to="/auth"
+              className="
+              flex-1
 
-      </ul>
+              rounded-full
 
-      {/* BUTTONS */}
-      <div className="mt-10 flex gap-3">
+              bg-[#667f42]
 
-        <Link
-          to="/login"
-          className="
-          rounded-full
-          border
-          border-primaryBlue
-          px-5
-          py-2
-          text-sm
-          font-heading
-          text-primaryBlue
-          "
-        >
-          Login
-        </Link>
+              py-3
 
-        <Link
-          to="/pricing"
-          className="
-          rounded-full
-          bg-primaryOrange
-          px-5
-          py-2
-          text-sm
-          font-heading
-          text-white
-          "
-        >
-          Upgrade
-        </Link>
+              text-center
+              text-white
+              "
+            >
+              Upgrade
+            </Link>
 
-      </div>
+          </div>
 
-    </div>
+        </div>
 
-  </div>
+      )}
 
-)}
     </header>
   );
 }
