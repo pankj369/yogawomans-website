@@ -34,7 +34,7 @@ function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="fixed top-4 left-0 w-full z-50 px-4">
+    <header className="fixed top-1 left-0 w-full z-50 px-4">
 
       <nav
         className="
