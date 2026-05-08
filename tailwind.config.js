@@ -14,7 +14,8 @@ export default {
       },
       fontFamily: {
         heading: ["Poppins", "sans-serif"],
-        body: ["Lato", "sans-serif"]
+        body: ["Lato", "sans-serif"],
+        inter: ["Inter", "sans-serif"]
       },
       boxShadow: {
         glow: "0 10px 40px rgba(26, 107, 175, 0.16)",

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { FaStar } from "react-icons/fa6";
+import { FaHeart, FaRegHeart, FaLock, FaPlay } from "react-icons/fa6";
 
 function Rating({ value }) {
   const stars = Array.from({ length: 5 }, (_, index) => index < Math.round(value));
@@ -22,7 +23,15 @@ function formatPrice(price) {
   }).format(price);
 }
 
-export default function ProductCard({ product, onAddToCart, onBuyNow }) {
+export default function ProductCard({
+  product,
+  onAddToCart,
+  onBuyNow,
+  onOpenDetails,
+  onToggleWishlist,
+  isWishlisted,
+  onPreview,
+}) {
   return (
     <motion.article
       whileHover={{ y: -10, scale: 1.01 }}
@@ -34,16 +43,27 @@ export default function ProductCard({ product, onAddToCart, onBuyNow }) {
         <img
           src={product.image}
           alt={product.title}
-          className="relative z-10 h-60 w-full object-contain transition duration-500 group-hover:scale-105"
+          className="relative z-10 h-60 w-full cursor-pointer object-contain transition duration-500 group-hover:scale-105"
+          onClick={onOpenDetails}
         />
         <div className="absolute left-4 top-4 z-20 rounded-full border border-white/20 bg-black/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/90 backdrop-blur-md">
           {product.category}
         </div>
+        {product.premium && (
+          <div className="absolute right-4 top-4 z-20 rounded-full border border-white/20 bg-black/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/90 backdrop-blur-md">
+            <FaLock className="mr-1 inline" /> Premium
+          </div>
+        )}
       </div>
 
       <div className="space-y-4 p-5 text-slate-100">
         <div className="space-y-2">
-          <h3 className="text-xl font-semibold text-white">{product.title}</h3>
+          <h3
+            className="cursor-pointer text-xl font-semibold text-white"
+            onClick={onOpenDetails}
+          >
+            {product.title}
+          </h3>
           <p className="text-sm leading-6 text-white/70">{product.description}</p>
         </div>
 
@@ -57,20 +77,36 @@ export default function ProductCard({ product, onAddToCart, onBuyNow }) {
           <span className="rounded-full bg-white/10 px-3 py-1">{product.category}</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="flex flex-wrap gap-3">
           <button
             type="button"
             onClick={() => onAddToCart(product)}
-            className="rounded-full border border-white/20 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-white/18"
+            className="flex-1 rounded-full border border-white/20 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-white/18"
           >
             Add to Cart
           </button>
           <button
             type="button"
             onClick={() => onBuyNow(product)}
-            className="rounded-full bg-gradient-to-r from-[#E8651A] to-[#f1a15d] px-4 py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(232,101,26,0.3)] transition duration-300 hover:-translate-y-0.5"
+            className="flex-1 rounded-full bg-gradient-to-r from-[#E8651A] to-[#f1a15d] px-4 py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(232,101,26,0.3)] transition duration-300 hover:-translate-y-0.5"
           >
             Buy Now
+          </button>
+          <button
+            type="button"
+            onClick={() => onToggleWishlist?.(product)}
+            className="rounded-full border border-white/20 bg-white/10 p-3 text-white transition hover:bg-white/20"
+            aria-label="Toggle wishlist"
+          >
+            {isWishlisted ? <FaHeart className="text-rose-300" /> : <FaRegHeart />}
+          </button>
+          <button
+            type="button"
+            onClick={() => onPreview?.(product)}
+            className="rounded-full border border-white/20 bg-white/10 p-3 text-white transition hover:bg-white/20"
+            aria-label="Preview product"
+          >
+            <FaPlay />
           </button>
         </div>
       </div>

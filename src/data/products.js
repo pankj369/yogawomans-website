@@ -34,6 +34,7 @@ export const products = [
     image: hathaImg,
     accent: "from-emerald-900/75 via-stone-800/70 to-amber-700/70",
     description: "Natural cork top, stable grip, and a grounded feel for slow, intentional practice.",
+    premium: false,
   },
   {
     id: "mat-02",
@@ -45,6 +46,7 @@ export const products = [
     image: vinyasaImg,
     accent: "from-amber-900/70 via-rose-900/60 to-stone-800/60",
     description: "Lightweight, roll-ready, and luxurious enough for studio or sunrise travel sessions.",
+    premium: true,
   },
   {
     id: "cushion-01",
@@ -56,6 +58,7 @@ export const products = [
     image: meditationImg,
     accent: "from-stone-800/70 via-amber-900/60 to-emerald-900/60",
     description: "Ergonomic elevation with a soft, supportive seat for deeper breathing and stillness.",
+    premium: false,
   },
   {
     id: "cushion-02",
@@ -67,6 +70,7 @@ export const products = [
     image: sacredImg,
     accent: "from-amber-900/70 via-stone-900/60 to-rose-900/60",
     description: "Plush crescent cushion designed to open the hips and keep the spine naturally tall.",
+    premium: true,
   },
   {
     id: "oil-01",
@@ -78,6 +82,7 @@ export const products = [
     image: heroImg,
     accent: "from-rose-900/70 via-amber-900/60 to-emerald-900/60",
     description: "Calm, grounding, and sleep-support blends for your daily yoga and evening wind-down.",
+    premium: false,
   },
   {
     id: "oil-02",
@@ -89,6 +94,7 @@ export const products = [
     image: yogasgaoImg,
     accent: "from-emerald-900/70 via-stone-900/60 to-amber-900/60",
     description: "A bright restorative aroma for morning meditation and fresh studio energy.",
+    premium: true,
   },
   {
     id: "bowl-01",
@@ -100,6 +106,7 @@ export const products = [
     image: ananyaImg,
     accent: "from-amber-900/70 via-stone-800/70 to-yellow-900/60",
     description: "Hand-hammered resonance with a rich, lingering tone for meditation sessions.",
+    premium: true,
   },
   {
     id: "bowl-02",
@@ -111,6 +118,7 @@ export const products = [
     image: meeraImg,
     accent: "from-stone-900/70 via-amber-900/60 to-emerald-900/50",
     description: "A polished ritual bowl with a warm ring that settles the mind beautifully.",
+    premium: false,
   },
   {
     id: "cloth-01",
@@ -122,6 +130,7 @@ export const products = [
     image: priyaImg,
     accent: "from-rose-900/70 via-stone-800/60 to-amber-900/60",
     description: "Breathable premium layers tailored for stretch, softness, and studio confidence.",
+    premium: true,
   },
   {
     id: "cloth-02",
@@ -133,6 +142,7 @@ export const products = [
     image: kavithaImg,
     accent: "from-emerald-900/70 via-stone-800/60 to-amber-900/50",
     description: "Minimal, sculpted, and quietly elegant for modern wellness wardrobes.",
+    premium: false,
   },
   {
     id: "decor-01",
@@ -144,6 +154,7 @@ export const products = [
     image: sacredImg,
     accent: "from-amber-900/70 via-rose-900/60 to-stone-900/60",
     description: "A warm ambient accent that turns any corner into a meditation sanctuary.",
+    premium: true,
   },
   {
     id: "decor-02",
@@ -155,6 +166,7 @@ export const products = [
     image: yogasgaoImg,
     accent: "from-stone-900/70 via-emerald-900/60 to-amber-900/50",
     description: "Subtle, textural decor that brings a grounded, premium temple feel indoors.",
+    premium: false,
   },
   {
     id: "tea-01",
@@ -166,6 +178,7 @@ export const products = [
     image: powerImg,
     accent: "from-amber-900/70 via-emerald-900/60 to-stone-900/60",
     description: "A soothing blend crafted for post-practice restoration and relaxed evenings.",
+    premium: false,
   },
   {
     id: "tea-02",
@@ -177,5 +190,6 @@ export const products = [
     image: prenatalImg,
     accent: "from-rose-900/70 via-amber-900/60 to-emerald-900/50",
     description: "A delicate, earthy brew designed to support balance, digestion, and calm.",
+    premium: true,
   },
 ];

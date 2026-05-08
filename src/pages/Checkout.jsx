@@ -1,9 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
-
-const AUTH_FLAG = "yogawomans_logged_in";
 
 function formatPrice(price) {
   return new Intl.NumberFormat("en-IN", {
@@ -15,12 +14,13 @@ function formatPrice(price) {
 
 export default function Checkout() {
   const navigate = useNavigate();
+  const auth = useAuth();
   const { cartItems, cartTotal } = useCart();
-  const isLoggedIn = typeof window !== "undefined" && window.localStorage.getItem(AUTH_FLAG) === "true";
+  const isLoggedIn = auth.isAuthenticated;
 
   useEffect(() => {
     if (!isLoggedIn) {
-      navigate("/auth");
+      navigate("/login");
     }
   }, [isLoggedIn, navigate]);
 

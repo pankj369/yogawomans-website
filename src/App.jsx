@@ -1,26 +1,31 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LandingPage from "./pages/LandingPage";
-import Authpage from "./pages/Authpage";
-import Login from "./pages/Login";
-import Shop from "./pages/Shop";
-import Checkout from "./pages/Checkout";
+import { BrowserRouter } from "react-router-dom";
 import { CartProvider } from "./context/CartContext";
+import { AuthProvider } from "./context/AuthContext";
+import { WishlistProvider } from "./context/WishlistContext";
+import { DashboardProvider } from "./context/DashboardContext";
+import { ToastProvider } from "./context/ToastContext";
+import AppRoutes, { AppRouteLoader } from "./routes/AppRoutes";
+import { Suspense } from "react";
 
 function App() {
   return (
     <BrowserRouter>
-      <CartProvider>
-        <div className="overflow-x-hidden">
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/auth" element={<Authpage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/checkout" element={<Checkout />} />
-          </Routes>
-        </div>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <WishlistProvider>
+            <DashboardProvider>
+              <ToastProvider>
+                <Suspense fallback={<AppRouteLoader />}>
+                  <div className="overflow-x-hidden">
+                    <AppRoutes />
+                  </div>
+                </Suspense>
+              </ToastProvider>
+            </DashboardProvider>
+          </WishlistProvider>
+        </CartProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

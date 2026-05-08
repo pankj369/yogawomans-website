@@ -3,10 +3,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FaBars, FaMinus, FaPlus, FaSearch, FaShoppingBag, FaTimes, FaTrash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
+import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
+import { useToast } from "../context/ToastContext";
+import { useDashboard } from "../context/DashboardContext";
+import { useWishlist } from "../context/WishlistContext";
 import { categories, products } from "../data/products";
-
-const AUTH_FLAG = "yogawomans_logged_in";
 
 function formatPrice(price) {
   return new Intl.NumberFormat("en-IN", {
@@ -14,10 +16,6 @@ function formatPrice(price) {
     currency: "INR",
     maximumFractionDigits: 0,
   }).format(price);
-}
-
-function isLoggedIn() {
-  return typeof window !== "undefined" && window.localStorage.getItem(AUTH_FLAG) === "true";
 }
 
 function ShopNavbar({ onToggleCart, cartCount }) {
@@ -127,11 +125,12 @@ function SkeletonCard() {
 
 function CartDrawer({ open, onClose }) {
   const { cartItems, cartTotal, updateQuantity, removeFromCart, clearCart } = useCart();
+  const auth = useAuth();
   const navigate = useNavigate();
 
   const goCheckout = () => {
-    if (!isLoggedIn()) {
-      navigate("/auth");
+    if (!auth.isAuthenticated) {
+      navigate("/login");
       return;
     }
     navigate("/checkout");
@@ -272,6 +271,10 @@ function CartDrawer({ open, onClose }) {
 export default function Shop() {
   const navigate = useNavigate();
   const { addToCart, cartCount } = useCart();
+  const auth = useAuth();
+  const toast = useToast();
+  const { state: dashboardState } = useDashboard();
+  const { toggleWishlist, isWishlisted } = useWishlist();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [cartOpen, setCartOpen] = useState(false);
@@ -296,8 +299,12 @@ export default function Shop() {
   }, [search, category]);
 
   const handleBuyNow = (product) => {
-    if (!isLoggedIn()) {
-      navigate("/auth");
+    if (product.premium && dashboardState.activePlan !== "Pro") {
+      navigate("/pricing");
+      return;
+    }
+    if (!auth.isAuthenticated) {
+      navigate("/login");
       return;
     }
     addToCart(product);
@@ -410,6 +417,18 @@ export default function Shop() {
                       setCartOpen(true);
                     }}
                     onBuyNow={handleBuyNow}
+                    onOpenDetails={() => {
+                      if (product.premium && dashboardState.activePlan !== "Pro") {
+                        navigate("/pricing");
+                        return;
+                      }
+                      navigate(`/shop/${product.id}`);
+                    }}
+                    onToggleWishlist={toggleWishlist}
+                    isWishlisted={isWishlisted(product.id)}
+                    onPreview={(item) =>
+                      toast.showToast({ title: item.title, message: item.description })
+                    }
                   />
                 </motion.div>
               ))}
