@@ -327,6 +327,7 @@ const getPasswordStrength = (pw) => {
 };
 const strengthLabels = ["", "Weak", "Fair", "Good", "Strong"];
 const strengthClasses = ["", "weak", "fair", "good", "strong"];
+const AUTH_FLAG = "yogawomans_logged_in";
 
 const variants = {
   enter:  { opacity: 0, x: 24,  transition: { duration: 0.3 } },
@@ -486,6 +487,7 @@ function LoginForm({ onForgot, onSwitch }) {
     setLoading(true);
     await new Promise((r) => setTimeout(r, 1400));
     setLoading(false);
+    window.localStorage.setItem(AUTH_FLAG, "true");
     alert("✅ Login successful! Welcome back.");
   };
 
@@ -618,7 +620,7 @@ function RegisterForm({ onSwitch }) {
       <span className="auth-success-icon">🎉</span>
       <h3 className="auth-success-title">Account Created!</h3>
       <p className="auth-success-text">
-        Welcome to YOGAM! We've sent a verification link to <b>{form.email}</b>.
+        Welcome to YOGAWOMANS! We've sent a verification link to <b>{form.email}</b>.
         Please check your inbox to activate your account.
       </p>
       <button className="auth-submit" type="button" onClick={onSwitch}>
@@ -721,7 +723,7 @@ function RegisterForm({ onSwitch }) {
           checked={agreed} onChange={() => { setAgreed(!agreed); setErrors({ ...errors, agreed: "" }); }} />
         <label htmlFor="terms" className="auth-check-lbl">
           I agree to the <a href="#">Terms of Service</a> and{" "}
-          <a href="#">Privacy Policy</a> of YOGAM
+          <a href="#">Privacy Policy</a> of YOGAWOMANS
         </label>
       </div>
       {errors.agreed && <span className="auth-error-msg" style={{marginTop:-12,display:"block",marginBottom:12}}>⚠ {errors.agreed}</span>}

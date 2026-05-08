@@ -318,7 +318,7 @@ function Navbar() {
         </Link>
 
         <Link
-          to="/auth"
+          to="/pricing"
           className="
           rounded-full
           bg-primaryOrange
