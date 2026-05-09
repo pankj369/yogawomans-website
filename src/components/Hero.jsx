@@ -135,7 +135,7 @@ function Hero() {
         <div className="relative z-10 flex min-h-screen flex-col justify-between px-5 pt-28">
 
           {/* Text */}
-          <div className="text-center">
+         <div className="mt-16 text-center">
 
             {/* Heading */}
             <motion.h1
