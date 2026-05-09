@@ -2,9 +2,9 @@ import { useState } from "react";
 import { AUTH_FLAG as PROFILE_AUTH_FLAG } from "./profileSetupStorage";
 
 // ─── Inline styles injected once ───────────────────────────────────────────
-if (typeof document !== "undefined" && !document.head.querySelector("[data-yogam-auth]")) {
+if (typeof document !== "undefined" && !document.head.querySelector("[data-yoga-auth]")) {
   const s = document.createElement("style");
-  s.setAttribute("data-yogam-auth", "true");
+  s.setAttribute("data-yoga-auth", "true");
   s.textContent = `
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Lato:wght@300;400;700&display=swap');
 
@@ -465,7 +465,7 @@ export function LeftPanel() {
           <div className="auth-logo-inner">🪷</div>
         </div>
 
-        <div className="auth-brand-name">YOGAM</div>
+        <div className="auth-brand-name">yoga</div>
         <div className="auth-brand-tag">Body · Mind · Soul</div>
 
         <div className="auth-quote">

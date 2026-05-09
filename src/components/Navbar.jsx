@@ -25,7 +25,7 @@ const links = [
   },
   {
     label: "Shop",
-    href: "#footer",
+    href: "/shop",
     icon: <FiShoppingBag />,
   },
 ];
@@ -71,26 +71,19 @@ function Navbar() {
           />
 
           <div className="hidden sm:block">
-            <h2
-              className="
-              text-[34px]
-              leading-none
-              font-serif
-              text-[#5d6f3d]
-              "
-            >
-              YOGA
-            </h2>
-
+           
             <p
               className="
               text-[11px]
-              tracking-[0.28em]
+              leading-[1.4]
+              tracking-[0.22em]
               uppercase
               text-[#c17b42]
               "
             >
-              Balance Within
+              Why should all
+              <br />
+              superheros be man?
             </p>
           </div>
 
@@ -110,23 +103,23 @@ function Navbar() {
 
             <li key={link.label} className="relative group">
 
-              <a
-                href={link.href}
-                className="
-                flex
-                items-center
-                gap-2
+              <Link
+              to={link.href}
+              className="
+              flex
+              items-center
+              gap-2
 
-                text-[17px]
-                font-medium
-                text-[#4d3928]
+              text-[17px]
+              font-medium
+              text-[#4d3928]
 
-                transition-all
-                duration-300
+              transition-all
+              duration-300
 
-                hover:text-[#6f8b4e]
-                "
-              >
+              hover:text-[#6f8b4e]
+              "
+                >
 
                 <span className="text-[18px]">
                   {link.icon}
@@ -134,7 +127,7 @@ function Navbar() {
 
                 {link.label}
 
-              </a>
+              </Link>
 
               {index === 0 && (
                 <div
@@ -265,8 +258,8 @@ function Navbar() {
 
               <li key={link.label}>
 
-                <a
-                  href={link.href}
+                <Link
+                  to={link.href}
                   onClick={() => setIsMenuOpen(false)}
                   className="
                   flex
@@ -277,7 +270,7 @@ function Navbar() {
                   font-medium
                   text-[#4d3928]
                   "
-                >
+                  >
 
                   <span>
                     {link.icon}
@@ -285,7 +278,7 @@ function Navbar() {
 
                   {link.label}
 
-                </a>
+                </Link>
 
               </li>
 

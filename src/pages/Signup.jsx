@@ -76,7 +76,7 @@ function RegisterForm({ onLogin, onComplete }) {
 
   return (
     <form onSubmit={handleSubmit} noValidate>
-      <h2 className="auth-title">Join YOGAM 🌿</h2>
+      <h2 className="auth-title">Join yogawomans 🌿</h2>
       <p className="auth-subtitle">Create your free account and begin the journey</p>
 
       <div className="auth-field">

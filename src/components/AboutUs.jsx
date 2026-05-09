@@ -274,9 +274,11 @@ if (!document.head.querySelector("[data-yoga-about]")) {
       gap: 28px;
     }
 
-.yoga-image-panel {
+    .yoga-image-panel {
       position: relative;
       overflow: hidden;
+      width: 100%;
+      max-width: 100%;
       border-radius: 34px;
       background: rgba(255,255,255,0.72);
       border: 1px solid rgba(46,125,50,0.16);
@@ -332,6 +334,8 @@ if (!document.head.querySelector("[data-yoga-about]")) {
       padding: 40px 34px;
       position: relative;
       overflow: hidden;
+      width: 100%;
+      max-width: 100%;
       backdrop-filter: blur(24px);
       box-shadow: 0 22px 60px rgba(46,125,50,0.1);
     }
@@ -477,14 +481,23 @@ if (!document.head.querySelector("[data-yoga-about]")) {
 
     /* ---------- Responsive ---------- */
     @media (max-width: 768px) {
+      .yoga-about-section {
+        padding: 72px 20px;
+      }
       .yoga-about-inner {
         grid-template-columns: 1fr;
-        gap: 48px;
+        gap: 36px;
       }
-      .yoga-heading { font-size: 32px; }
-      .yoga-right { order: -1; }
+      .yoga-heading { font-size: 34px; }
+      .yoga-left { order: 1; }
+      .yoga-right {
+        order: 2;
+        align-items: center;
+      }
       .yoga-trust-grid { grid-template-columns: 1fr; }
       .yoga-image-panel { padding: 20px; }
+      .yoga-visual-card { padding: 30px 24px; }
+      .yoga-quote { font-size: 18px; }
     }
   `;
   document.head.appendChild(s);
@@ -583,7 +596,7 @@ export default function AboutUs() {
             <img
               src={sacredimage}
               alt="Yoga woman practicing wellness"
-              className="sacredimage"
+              className="yoga-yoga-image"
             />
             <div className="yoga-image-label">Sacred Flow</div>
           </div>

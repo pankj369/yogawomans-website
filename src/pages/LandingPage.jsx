@@ -8,7 +8,6 @@ import ClassesSection from "../components/ClassesSection";
 import Pricing from "../components/Pricing";        
 import FindSolution from "../components/FindSolution";
 import Testimonials from "../components/Testimonials";
-// import FAQ from "../components/FAQ";                   // ✅ NEW
 import Footer from "../components/Footer";
 
 function LandingPage() {
