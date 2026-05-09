@@ -40,13 +40,39 @@ if (typeof document !== "undefined" && !document.head.querySelector("[data-yogam
     }
 
     /* ── Left decorative panel ── */
-    .auth-left {
-      position:relative;
-      background:linear-gradient(160deg,#0f1f0f 0%,#1A2E1A 50%,#2a4a1a 100%);
-      display:flex;flex-direction:column;
-      align-items:center;justify-content:center;
-      padding:60px 48px;overflow:hidden;
-    }
+.auth-left {
+  position: relative;
+
+  background:
+    radial-gradient(circle at top left, rgba(46,125,50,0.18), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(232,101,26,0.14), transparent 30%),
+    linear-gradient(160deg,#071407 0%,#102510 45%,#183818 100%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 70px 60px;
+
+  overflow: hidden;
+}
+.auth-left-content{
+  width:100%;
+  max-width:520px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  margin:auto;
+
+  position:relative;
+  z-index:2;
+
+  transform:translateY(-90px);
+}
+
     .auth-left-blob {
       position:absolute;border-radius:50%;pointer-events:none;
     }
@@ -93,21 +119,54 @@ if (typeof document !== "undefined" && !document.head.querySelector("[data-yogam
       font-size:38px;position:relative;z-index:1;
     }
 
-    .auth-brand-name{
-      font-size:32px;font-weight:800;color:#fff;
-      letter-spacing:0.06em;margin-bottom:4px;
-    }
-    .auth-brand-tag{
-      font-size:12px;font-weight:500;color:rgba(255,255,255,0.4);
-      letter-spacing:0.2em;text-transform:uppercase;margin-bottom:44px;
-    }
+.auth-brand-name{
+  font-size:52px;
+  font-weight:800;
 
-    .auth-quote{
-      background:rgba(255,255,255,0.04);
-      border:1px solid rgba(255,255,255,0.08);
-      border-radius:20px;padding:28px 32px;text-align:center;
-      max-width:380px;position:relative;
-    }
+  color:#ffffff;
+
+  line-height:1;
+
+  letter-spacing:0.08em;
+
+  margin:0;
+}
+.auth-brand-tag{
+  font-size:13px;
+
+  font-weight:500;
+
+  color:rgba(255,255,255,0.55);
+
+  letter-spacing:0.28em;
+
+  text-transform:uppercase;
+
+  margin-top:-10px;
+}
+
+.auth-quote{
+  width:100%;
+  max-width:420px;
+
+  background:rgba(255,255,255,0.05);
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(18px);
+
+  border-radius:28px;
+
+  padding:36px 34px;
+
+  text-align:center;
+
+  position:relative;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+}
     .auth-quote-mark{
       font-size:56px;line-height:0.6;color:rgba(232,101,26,0.25);
       font-family:serif;font-weight:900;display:block;margin-bottom:10px;
@@ -121,10 +180,20 @@ if (typeof document !== "undefined" && !document.head.querySelector("[data-yogam
       font-size:13px;font-weight:700;color:#E8651A;
     }
 
-    .auth-stats{
-      display:flex;gap:32px;margin-top:36px;
-    }
-    .auth-stat{text-align:center;}
+ .auth-stats{
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  gap:28px;
+
+  margin-top:6px;
+}
+.auth-stat{
+  text-align:center;
+  min-width:90px;
+}
     .auth-stat-val{font-size:22px;font-weight:800;color:#E8651A;}
     .auth-stat-lbl{
       font-family:'Lato',sans-serif;font-size:11px;
@@ -306,11 +375,26 @@ if (typeof document !== "undefined" && !document.head.querySelector("[data-yogam
     .auth-back:hover{text-decoration:underline;}
 
     /* Responsive */
-    @media(max-width:768px){
-      .auth-page{grid-template-columns:1fr;}
-      .auth-left{display:none;}
-      .auth-right{padding:40px 24px;min-height:100vh;}
-    }
+@media(max-width:768px){
+
+  .auth-page{
+    grid-template-columns:1fr;
+  }
+
+  .auth-left{
+    display:none;
+  }
+
+  .auth-right{
+    padding:32px 22px;
+    min-height:100vh;
+  }
+
+  .auth-form-inner{
+    max-width:100%;
+  }
+
+}
   `;
   document.head.appendChild(s);
 }
@@ -373,12 +457,8 @@ export function LeftPanel() {
       <div className="auth-left-blob auth-left-blob-1" />
       <div className="auth-left-blob auth-left-blob-2" />
       <div className="auth-left-blob auth-left-blob-3" />
-      <div className="auth-float-emoji">🧘</div>
-      <div className="auth-float-emoji">🌿</div>
-      <div className="auth-float-emoji">🪷</div>
-      <div className="auth-float-emoji">✨</div>
 
-      <div style={{ position: "relative", zIndex: 1, textAlign: "center" }}>
+      <div className="auth-left-content">
         <div className="auth-logo-wrap" style={{ margin: "0 auto 24px" }}>
           <div className="auth-logo-ring" />
           <div className="auth-logo-ring-2" />
