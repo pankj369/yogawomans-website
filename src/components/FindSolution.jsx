@@ -81,7 +81,7 @@ function FindSolution() {
         transition={{ duration: 0.6 }}
         className="mb-5 flex justify-center"
       >
-        <div className="yc-badge font-semibold">
+        <div className="yc-badge ">
             🧘 Yoga Solution
           </div>
       </motion.div>
