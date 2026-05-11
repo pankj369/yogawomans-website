@@ -159,7 +159,7 @@ const ResultSection = ({ recommendations, category, answers }) => {
                 transition={{ duration: 0.3 }}
                 className="rounded-lg bg-white/20 p-3 backdrop-blur"
               >
-                <p className="text-xs font-semibold text-gray-600 uppercase mb-1 capitalize">
+                <p className="text-xs font-semibold text-gray-600 mb-1 capitalize">
                   {key.replace(/([A-Z])/g, " $1").trim()}
                 </p>
                 <p className="text-sm font-bold text-gray-800">
