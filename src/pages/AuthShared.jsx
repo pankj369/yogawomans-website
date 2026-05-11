@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AUTH_FLAG as PROFILE_AUTH_FLAG } from "./profileSetupStorage";
-
+import navlogo from "../assests/images/navlogo.png";
 // ─── Inline styles injected once ───────────────────────────────────────────
 if (typeof document !== "undefined" && !document.head.querySelector("[data-yoga-auth]")) {
   const s = document.createElement("style");
@@ -462,10 +462,14 @@ export function LeftPanel() {
         <div className="auth-logo-wrap" style={{ margin: "0 auto 24px" }}>
           <div className="auth-logo-ring" />
           <div className="auth-logo-ring-2" />
-          <div className="auth-logo-inner">🪷</div>
+          <img
+                      src={navlogo}
+                      alt="logo"
+                      className="h-16 w-auto object-contain"
+                    />
         </div>
 
-        <div className="auth-brand-name">yoga</div>
+
         <div className="auth-brand-tag">Body · Mind · Soul</div>
 
         <div className="auth-quote">

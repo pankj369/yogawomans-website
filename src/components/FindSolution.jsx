@@ -1,437 +1,366 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+/**
+ * FindSolution Component - Personalized Wellness Recommendation System
+ * Premium AI-powered wellness recommendations with beautiful UI/UX
+ * Features: Interactive cards, animated modal, multi-step forms, personalized recommendations
+ * Powered by Framer Motion animations and Tailwind CSS styling
+ */
 
-const solutions = [
-  {
-    id: "stress",
-    label: "Stress",
-    icon: "🧘",
-    title: "Stress — Yoga Can Help",
-    desc: "Chronic stress affects your body and mind. Our breathing techniques and restorative yoga help activate the parasympathetic nervous system naturally.",
-    tags: ["Pranayama", "Meditation"],
-  },
-  {
-    id: "mental",
-    label: "Mental",
-    icon: "🧠",
-    title: "Mental Health — Yoga Can Help",
-    desc: "Yoga supports mental wellness through mindfulness and breathwork that calm the nervous system.",
-    tags: ["Mindfulness", "Breathing"],
-  },
-  {
-    id: "weight",
-    label: "Weight",
-    icon: "⚖️",
-    title: "Weight Loss — Yoga Can Help",
-    desc: "Power yoga and vinyasa flow improve metabolism and burn calories naturally.",
-    tags: ["Power Yoga", "Vinyasa"],
-  },
-  {
-    id: "depression",
-    label: "Mood",
-    icon: "🌤️",
-    title: "Depression — Yoga Can Help",
-    desc: "Gentle yoga and mindful breathing can improve mood and emotional balance.",
-    tags: ["Yoga Nidra", "Breathwork"],
-  },
-  {
-    id: "anger",
-    label: "Anger",
-    icon: "😤",
-    title: "Anger — Yoga Can Help",
-    desc: "Yoga teaches pause and awareness so emotions become easier to manage.",
-    tags: ["Meditation", "Yin Yoga"],
-  },
-  {
-    id: "sleep",
-    label: "Sleep",
-    icon: "😴",
-    title: "Sleep — Yoga Can Help",
-    desc: "Night yoga routines relax your nervous system and improve sleep quality.",
-    tags: ["Restorative", "Stretching"],
-  },
-  {
-    id: "wellness",
-    label: "Wellness",
-    icon: "🌸",
-    title: "Wellness — Yoga Can Help",
-    desc: "Yoga creates harmony between body, mind, and soul for complete wellness.",
-    tags: ["Hatha Yoga", "Detox"],
-  },
-  {
-    id: "backpain",
-    label: "Back Pain",
-    icon: "🦴",
-    title: "Back Pain — Yoga Can Help",
-    desc: "Therapeutic yoga improves posture and relieves chronic back pain naturally.",
-    tags: ["Stretching", "Core"],
-  },
-  {
-    id: "energy",
-    label: "Energy",
-    icon: "⚡",
-    title: "Fatigue — Yoga Can Help",
-    desc: "Yoga boosts circulation and energy while calming mental exhaustion.",
-    tags: ["Sun Salutation", "Flow"],
-  },
-];
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import WellnessCard from "./wellness/WellnessCard";
+import WellnessModal from "./wellness/WellnessModal";
+import { wellnessCategories } from "../data/wellnessRecommendationData";
 
 function FindSolution() {
-  const [active, setActive] = useState(null);
+  const [activeCard, setActiveCard] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Handle card click - open modal
+  const handleCardClick = (category) => {
+    setSelectedCategory(category);
+    setActiveCard(category.id);
+    setIsModalOpen(true);
+  };
+
+  // Handle modal close
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setActiveCard(null);
+  };
+
+  // Animation variants for staggered card animations
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    },
+  };
 
   return (
     <section
       className="
-      relative
-      overflow-hidden
-
-      bg-[linear-gradient(180deg,#f7f4ee_0%,#fffaf4_35%,#f3f8ef_100%)]
-
-      px-4
-      py-24
-
-      md:px-10
+        relative
+        overflow-hidden
+        bg-[linear-gradient(180deg,#f7f4ee_0%,#fffaf4_35%,#f3f8ef_100%)]
+        px-4
+        py-24
+        md:px-10
       "
     >
+      {/* Decorative animated background elements */}
+      <motion.div
+        animate={{ y: [0, 20, 0], rotate: [0, 5, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -left-16 -top-16 h-56 w-56 rounded-full bg-blue-400/10 blur-3xl"
+      />
+      <motion.div
+        animate={{ y: [0, -20, 0], rotate: [0, -5, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-purple-400/10 blur-3xl"
+      />
 
-      {/* TOP DECOR */}
-      <div className="absolute -left-16 -top-16 h-56 w-56 rounded-full bg-[#7d9b76]/10 blur-3xl" />
-      <div className="absolute -bottom-16 -right-16 h-56 w-56 rounded-full bg-[#d9924c]/10 blur-3xl" />
+      {/* BADGE - Animated entrance */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="mb-5 flex justify-center"
+      >
+        <div className="yc-badge font-semibold">
+            🧘 Yoga Solution
+          </div>
+      </motion.div>
 
-      {/* BADGE */}
-      <div className="mb-5 flex justify-center">
-
-        <div
+      {/* HEADING - Main title */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="text-center"
+      >
+        <h2
           className="
-          rounded-full
-
-          border border-[#7d9b76]/20
-
-          bg-white/60
-
-          px-5
-          py-2
-
-          text-[11px]
-          font-semibold
-          uppercase
-          tracking-[0.25em]
-
-          text-[#6f8b67]
-
-          backdrop-blur-md
+            text-center
+            text-4xl
+            font-extrabold
+            leading-tight
+            text-gray-900
+            sm:text-5xl
           "
         >
-          Yoga Solutions
-        </div>
+          Find <span className="text-orange-500">Solution</span> For... 
+        </h2>
 
-      </div>
+        <p
+          className="
+            mx-auto
+            mt-5
+            max-w-[650px]
+            text-center
+            text-[15px]
+            leading-relaxed
+            text-gray-600
+            sm:text-[17px]
+          "
+        >
+          Discover personalized yoga, meditation, and breathing exercises tailored to your wellness goals.
+          Click any card to get started with your AI-powered wellness journey.
+        </p>
+      </motion.div>
 
-      {/* HEADING */}
-      <h2
-        className="
-        text-center
-
-        text-4xl
-        font-bold
-
-        leading-tight
-
-        text-[#2d241d]
-
-        sm:text-5xl
-        "
+      {/* DIVIDER - Decorative separator */}
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        className="mt-8 flex items-center justify-center gap-4 origin-center"
       >
-        Find a Solution{" "}
-        <span className="text-[#c77732]">
-          For..
-        </span>
-      </h2>
-
-      {/* SUBTEXT */}
-      <p
-        className="
-        mx-auto
-        mt-5
-        max-w-[650px]
-
-        text-center
-        text-[15px]
-        leading-relaxed
-
-        text-[#6f665d]
-
-        sm:text-[17px]
-        "
-      >
-        Whatever you're going through, yoga has an answer.
-        Choose your challenge below and explore calming solutions.
-      </p>
-
-      {/* DIVIDER */}
-      <div className="mt-8 flex items-center justify-center gap-4">
-
-        <div className="h-[2px] w-14 rounded-full bg-[#7d9b76]" />
-
-        <span className="text-2xl">
+        <div className="h-[2px] w-14 rounded-full bg-gradient-to-r from-blue-400 to-transparent" />
+        <motion.span
+          animate={{ rotate: 360, scale: [1, 1.2, 1] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+          className="text-2xl"
+        >
           🪷
-        </span>
+        </motion.span>
+        <div className="h-[2px] w-14 rounded-full bg-gradient-to-l from-purple-400 to-transparent" />
+      </motion.div>
 
-        <div className="h-[2px] w-14 rounded-full bg-[#c77732]" />
-
-      </div>
-
-      {/* GRID */}
-      <div
+      {/* CARDS GRID - Responsive wellness category cards */}
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
         className="
-        mx-auto
-        mt-14
-
-        grid
-        max-w-[1100px]
-
-        grid-cols-3
-        gap-4
-
-        sm:grid-cols-3
-        md:grid-cols-4
-        lg:grid-cols-5
+          mx-auto
+          mt-14
+          grid
+          max-w-[1400px]
+          grid-cols-2
+          gap-4
+          sm:grid-cols-3
+          md:grid-cols-4
+          lg:grid-cols-5
         "
       >
+        {wellnessCategories.map((category) => (
+          <motion.div
+            key={category.id}
+            variants={itemVariants}
+            onClick={() => handleCardClick(category)}
+          >
+            <WellnessCard
+              category={category}
+              isActive={activeCard === category.id}
+              onClick={() => handleCardClick(category)}
+            />
+          </motion.div>
+        ))}
+      </motion.div>
 
-        {solutions.map((item) => {
-
-          const isActive = active?.id === item.id;
-
-          return (
-            <button
-              key={item.id}
-              onClick={() =>
-                setActive(isActive ? null : item)
-              }
-              className={`
-              group
-
-              rounded-[28px]
-
-              border
-
-              p-5
-
-              transition-all
-              duration-300
-
-              ${
-                isActive
-                  ? "border-[#c77732] bg-[#fff6ee] shadow-[0_18px_40px_rgba(199,119,50,0.12)]"
-                  : "border-[#7d9b76]/15 bg-[#C0E1D2] hover:-translate-y-1 hover:border-[#7d9b76]/40 hover:shadow-[0_18px_40px_rgba(0,0,0,0.06)]"
-              }
-
-              backdrop-blur-xl
-              `}
-            >
-
-              {/* ICON */}
-              <div
-                className={`
-                mx-auto
-
+      {/* Highlighted description card for active category */}
+      {activeCard && selectedCategory && (
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.95 }}
+          transition={{ duration: 0.4 }}
+          className="
+            mx-auto
+            mt-12
+            max-w-[950px]
+            rounded-[30px]
+            border border-white/40
+            bg-white/80
+            p-7
+            shadow-[0_20px_50px_rgba(0,0,0,0.1)]
+            backdrop-blur-2xl
+          "
+        >
+          <div className="flex flex-col gap-5 md:flex-row md:items-start">
+            {/* Icon */}
+            <motion.div
+              animate={{ rotate: [0, -5, 5, 0] }}
+              transition={{ duration: 3, repeat: Infinity }}
+              className="
                 flex
-                h-16
-                w-16
+                h-20
+                w-20
+                flex-shrink-0
                 items-center
                 justify-center
-
-                rounded-[22px]
-
-                text-3xl
-
-                transition-all
-                duration-300
-
-                ${
-                  isActive
-                    ? "bg-[#fff0e0]"
-                    : "bg-[#f3f8ef]"
-                }
-                `}
-              >
-                {item.icon}
-              </div>
-
-              {/* LABEL */}
-              <h3
-                className={`
-                mt-4
-
-                text-sm
-                font-semibold
-
-                ${
-                  isActive
-                    ? "text-[#c77732]"
-                    : "text-[#2d241d]"
-                }
-                `}
-              >
-                {item.label}
-              </h3>
-
-            </button>
-          );
-        })}
-
-      </div>
-
-      {/* RESULT BOX */}
-      {active && (
-
-        <div
-          className="
-          mx-auto
-          mt-12
-
-          max-w-[950px]
-
-          rounded-[30px]
-
-          border
-          border-[#7d9b76]/10
-
-          bg-white/75
-
-          p-7
-
-          shadow-[0_20px_50px_rgba(0,0,0,0.06)]
-
-          backdrop-blur-2xl
-          "
-        >
-
-          <div className="flex flex-col gap-5 md:flex-row">
-
-            {/* EMOJI */}
-            <div
-              className="
-              flex
-              h-20
-              w-20
-              items-center
-              justify-center
-
-              rounded-[24px]
-
-              bg-[#fff3e6]
-
-              text-4xl
+                rounded-[24px]
+                bg-gradient-to-br from-blue-100 to-purple-100
+                text-4xl
               "
             >
-              {active.icon}
-            </div>
+              {selectedCategory.icon}
+            </motion.div>
 
-            {/* CONTENT */}
+            {/* Content */}
             <div className="flex-1">
-
-              <h3
-                className="
-                text-2xl
-                font-bold
-
-                text-[#2d241d]
-                "
-              >
-                {active.title}
+              <h3 className="text-2xl font-bold text-gray-800">
+                {selectedCategory.label} Wellness
               </h3>
 
-              <p
-                className="
-                mt-3
-
-                text-[15px]
-                leading-relaxed
-
-                text-[#6f665d]
-                "
-              >
-                {active.desc}
+              <p className="mt-3 text-[15px] leading-relaxed text-gray-700">
+                {selectedCategory.description}
               </p>
 
-              {/* TAGS */}
-              <div className="mt-5 flex flex-wrap gap-3">
-
-                {active.tags.map((tag) => (
-
-                  <span
-                    key={tag}
-                    className="
-                    rounded-full
-
-                    border
-                    border-[#7d9b76]/15
-
-                    bg-[#f4f8f1]
-
-                    px-4
-                    py-2
-
-                    text-xs
-                    font-semibold
-
-                    text-[#6f8b67]
-                    "
-                  >
-                    {tag}
-                  </span>
-
-                ))}
-
-              </div>
-
+              {/* CTA - Click to start form */}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleCardClick(selectedCategory)}
+                className="
+                  mt-5
+                  inline-flex
+                  items-center
+                  gap-2
+                  rounded-full
+                  bg-gradient-to-r from-blue-500 to-purple-500
+                  px-6
+                  py-2
+                  text-sm
+                  font-bold
+                  text-white
+                  shadow-lg
+                  hover:shadow-xl
+                  transition-all
+                "
+              >
+                Start Personalization → 
+              </motion.button>
             </div>
 
+            {/* Close button */}
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                setActiveCard(null);
+                setSelectedCategory(null);
+              }}
+              className="
+                flex
+                h-10
+                w-10
+                flex-shrink-0
+                items-center
+                justify-center
+                rounded-full
+                bg-red-100/80
+                text-red-600
+                hover:bg-red-200
+                transition-colors
+              "
+            >
+              ✕
+            </motion.button>
           </div>
-
-        </div>
-
+        </motion.div>
       )}
 
-      {/* BUTTON */}
-      <div className="mt-14 flex justify-center">
+      {/* Wellness Modal - Opens when user clicks a card */}
+      {selectedCategory && (
+        <WellnessModal
+          category={selectedCategory}
+          isOpen={isModalOpen}
+          onClose={handleModalClose}
+        />
+      )}
+
+      {/* CTA Button - Link to explore all classes */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.5 }}
+        className="mt-14 flex flex-col items-center gap-4"
+      >
+        <p className="text-center text-gray-600 text-sm">
+          💡 Select any wellness category above to get personalized recommendations
+        </p>
 
         <Link
           to="/auth"
           className="
-          inline-flex
-          items-center
-          gap-3
-
-          rounded-full
-
-          bg-[linear-gradient(135deg,#c77732,#d9924c)]
-
-          px-8
-          py-4
-
-          text-sm
-          font-semibold
-          uppercase
-          tracking-[0.08em]
-
-          text-white
-
-          shadow-[0_14px_35px_rgba(199,119,50,0.28)]
-
-          transition-all
-          duration-300
-
-          hover:-translate-y-1
+            inline-flex
+            items-center
+            gap-3
+            rounded-full
+            bg-[linear-gradient(135deg,#c77732,#d9924c)]
+            px-8
+            py-4
+            text-sm
+            font-semibold
+            uppercase
+            tracking-[0.08em]
+            text-white
+            shadow-[0_14px_35px_rgba(199,119,50,0.28)]
+            transition-all
+            duration-300
+            hover:-translate-y-1
+            hover:shadow-[0_20px_45px_rgba(199,119,50,0.35)]
           "
         >
-          🧘 Explore All Classes
+          🧘 Explore All Premium Classes
         </Link>
+      </motion.div>
 
-      </div>
-
+      {/* Features section */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.6 }}
+        className="mt-16 mx-auto max-w-[1100px]"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            {
+              icon: "🎯",
+              title: "AI-Powered",
+              desc: "Personalized recommendations using advanced algorithms",
+            },
+            {
+              icon: "⚡",
+              title: "Instant Results",
+              desc: "Get customized wellness plans in seconds",
+            },
+            {
+              icon: "🔄",
+              title: "Adjust Anytime",
+              desc: "Re-take the questionnaire to get new recommendations",
+            },
+          ].map((feature, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 + idx * 0.1 }}
+              className="text-center p-4"
+            >
+              <div className="text-4xl mb-2">{feature.icon}</div>
+              <h4 className="font-bold text-gray-800 mb-1">{feature.title}</h4>
+              <p className="text-sm text-gray-600">{feature.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
     </section>
   );
 }
