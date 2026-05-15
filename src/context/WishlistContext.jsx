@@ -1,38 +1,174 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import useLocalStorage from "../hooks/useLocalStorage";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import {
+  getWishlistItems,
+  addToWishlistApi,
+  removeWishlistItemApi,
+} from "../services/wishlistService";
 
 const WishlistContext = createContext(null);
 
-export function WishlistProvider({ children }) {
-  const [items, setItems] = useLocalStorage("yogawomans_wishlist", [], "localStorage");
+export function WishlistProvider({
+  children,
+}) {
 
-  const toggleWishlist = (product) => {
-    setItems((current) => {
-      const exists = current.some((item) => item.id === product.id);
-      return exists ? current.filter((item) => item.id !== product.id) : [...current, product];
-    });
+  const [
+    wishlistItems,
+    setWishlistItems,
+  ] = useState([]);
+
+
+
+  // FETCH WISHLIST
+  const fetchWishlist =
+    async () => {
+
+      try {
+
+        const response =
+          await getWishlistItems();
+
+        if (response?.wishlist) {
+
+          setWishlistItems(
+            response.wishlist
+          );
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Fetch wishlist error:",
+          error
+        );
+      }
+    };
+
+
+
+  // LOAD ON START
+  useEffect(() => {
+
+    fetchWishlist();
+
+  }, []);
+
+
+
+
+  // TOGGLE WISHLIST
+  const toggleWishlist =
+    async (product) => {
+
+      try {
+
+        const existingItem =
+          wishlistItems.find(
+            (item) =>
+              item.product_id ===
+              product.id
+          );
+
+
+
+        if (existingItem) {
+
+          await removeWishlistItemApi(
+            existingItem.id
+          );
+
+        } else {
+
+          await addToWishlistApi(
+            product.id
+          );
+        }
+
+
+
+        await fetchWishlist();
+
+      } catch (error) {
+
+        console.error(
+          "Wishlist toggle error:",
+          error
+        );
+      }
+    };
+
+
+
+
+  // CHECK WISHLIST
+  const isWishlisted = (
+    productId
+  ) => {
+
+    return wishlistItems.some(
+      (item) =>
+        item.product_id ===
+        productId
+    );
   };
 
-  const isWishlisted = (id) => items.some((item) => item.id === id);
+
+
+
+  // CLEAR FRONTEND STATE
+  const clearWishlist = () => {
+
+    setWishlistItems([]);
+  };
+
+
+
 
   const value = useMemo(
     () => ({
-      wishlistItems: items,
-      wishlistCount: items.length,
+      wishlistItems,
+      wishlistCount:
+        wishlistItems.length,
+
       toggleWishlist,
+
       isWishlisted,
-      clearWishlist: () => setItems([]),
+
+      clearWishlist,
     }),
-    [items]
+    [wishlistItems]
   );
 
-  return <WishlistContext.Provider value={value}>{children}</WishlistContext.Provider>;
+
+
+  return (
+    <WishlistContext.Provider
+      value={value}
+    >
+      {children}
+    </WishlistContext.Provider>
+  );
 }
 
+
+
 export function useWishlist() {
-  const context = useContext(WishlistContext);
+
+  const context =
+    useContext(WishlistContext);
+
   if (!context) {
-    throw new Error("useWishlist must be used within WishlistProvider");
+
+    throw new Error(
+      "useWishlist must be used within WishlistProvider"
+    );
   }
+
   return context;
 }

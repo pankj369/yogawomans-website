@@ -34,7 +34,7 @@ export default function AppRoutes() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/pricing" element={<PricingPage />} />
       <Route path="/shop" element={<Shop />} />
-      <Route path="/shop/:productId" element={<ProductDetail />} />
+      <Route path="/shop/:slug" element={<ProductDetail />} />
 
       <Route element={<ProtectedRoute />}>
         <Route path="/profile-setup" element={<ProfileSetup />} />

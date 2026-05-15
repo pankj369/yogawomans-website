@@ -13,6 +13,10 @@ import {
   markProfileSetupSkipped,
   persistProfileSetupState,
 } from "./profileSetupStorage";
+import {
+  getMyProfile,
+  updateProfile,
+} from "../services/userService";
 
 const stepVariants = {
   enter: (direction) => ({
@@ -39,7 +43,11 @@ export default function ProfileSetup() {
   const auth = useAuth();
   const [direction, setDirection] = useState(1);
   const [state, setState] = useState(() => loadProfileSetupState());
+  const [loading, setLoading] = useState(false);
 
+const [initialLoading, setInitialLoading] = useState(true);
+
+const [error, setError] = useState("");
   const isLoggedIn = auth.isAuthenticated;
   const completed = state.completed === true;
   const totalSteps = 4;
@@ -47,10 +55,70 @@ export default function ProfileSetup() {
   useEffect(() => {
     persistProfileSetupState(state);
   }, [state]);
+useEffect(() => {
+      
+  const fetchProfile = async () => {
 
+    try {
+
+      const response = await getMyProfile();
+
+      if (response?.profile) {
+
+        const profile = response.profile;
+
+        setState((prev) => ({
+          ...prev,
+          data: {
+            ...prev.data,
+
+            fullName: profile.full_name || "",
+
+            phone: profile.phone || "",
+
+            age: profile.age || "",
+
+            gender: profile.gender || "",
+
+            height: profile.height || "",
+
+            weight: profile.weight || "",
+
+            goals: profile.wellness_goal
+              ? [profile.wellness_goal]
+              : [],
+
+            yogaStyle:
+              profile.preferred_yoga_style || "",
+          },
+        }));
+      }
+
+    } catch (error) {
+
+      console.error("Fetch profile error:", error);
+
+    } finally {
+
+      setInitialLoading(false);
+    }
+  };
+
+
+
+  fetchProfile();
+
+}, []);
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
+  if (initialLoading) {
+  return (
+    <div className="flex min-h-screen items-center justify-center text-xl font-semibold">
+      Loading profile...
+    </div>
+  );
+}
 
   if (completed) {
     return <Navigate to="/dashboard" replace />;
@@ -123,11 +191,55 @@ export default function ProfileSetup() {
     navigate("/dashboard", { replace: true });
   };
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
+
+  try {
+
+    setLoading(true);
+
+    setError("");
+
+    const payload = {
+      full_name: state.data.fullName,
+      phone: state.data.phone,
+      age: Number(state.data.age),
+      gender: state.data.gender,
+      height: state.data.height,
+      weight: state.data.weight,
+
+      wellness_goal:
+        state.data.goals?.[0] || "",
+
+      preferred_yoga_style:
+        state.data.yogaStyle || "",
+
+      onboarding_completed: true,
+    };
+
+    await updateProfile(payload);
+
     markProfileSetupCompleted(state.data);
+
     auth.completeProfileSetup(state.data);
-    navigate("/dashboard", { replace: true });
-  };
+
+    navigate("/dashboard", {
+      replace: true,
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    setError(
+      error?.response?.data?.message ||
+      "Failed to save profile"
+    );
+
+  } finally {
+
+    setLoading(false);
+  }
+};
 
   const steps = [
     <BasicInfoStep
@@ -231,7 +343,11 @@ export default function ProfileSetup() {
             </AnimatePresence>
           </div>
         </div>
-
+              {error && (
+  <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+    {error}
+  </div>
+)}
         <p className="mt-5 text-center text-xs text-[#7d6a57]">
           Your progress is saved automatically in localStorage so you can continue anytime.
         </p>

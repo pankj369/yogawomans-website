@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { signupUser } from "../services/authService";
 import {
   AuthInput,
   AuthLayout,
@@ -33,16 +34,19 @@ function RegisterForm({ onLogin, onComplete }) {
     return e;
   };
 
-  const handleSubmit = async (ev) => {
-    ev.preventDefault();
-    const e = validate();
-    if (Object.keys(e).length) {
-      setErrors(e);
-      return;
-    }
+const handleSubmit = async (ev) => {
+  ev.preventDefault();
+
+  const e = validate();
+
+  if (Object.keys(e).length) {
+    setErrors(e);
+    return;
+  }
+
+  try {
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1600));
-    setLoading(false);
+
     const payload = {
       name: form.name,
       email: form.email,
@@ -50,10 +54,27 @@ function RegisterForm({ onLogin, onComplete }) {
       password: form.password,
       rememberMe: true,
     };
-    if (onComplete) onComplete(payload);
-    else setDone(true);
-  };
 
+    const response = await signupUser(payload);
+
+setDone(true);
+
+if (onComplete) {
+  onComplete(response);
+}
+  } catch (error) {
+    console.error("Signup Error:", error);
+
+    setErrors({
+      api:
+        error?.response?.data?.message ||
+        "Signup failed. Please try again.",
+    });
+
+  } finally {
+    setLoading(false);
+  }
+};
   const set = (k) => (ev) => {
     setForm({ ...form, [k]: ev.target.value });
     setErrors({ ...errors, [k]: "" });
@@ -226,7 +247,11 @@ function RegisterForm({ onLogin, onComplete }) {
           ⚠ {errors.agreed}
         </span>
       )}
-
+{errors.api && (
+  <span className="auth-error-msg">
+    ⚠ {errors.api}
+  </span>
+)}
       <button className="auth-submit" type="submit" disabled={loading}>
         {loading ? "🌱 Creating Account…" : "Create Account →"}
       </button>
@@ -259,10 +284,9 @@ export default function Signup() {
     <AuthLayout>
       <RegisterForm
         onLogin={() => navigate("/login")}
-        onComplete={(payload) => {
-          auth.register(payload);
-          navigate("/profile-setup", { replace: true });
-        }}
+       onComplete={() => {
+  navigate("/login");
+}}
       />
     </AuthLayout>
   );

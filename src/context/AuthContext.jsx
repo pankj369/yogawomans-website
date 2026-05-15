@@ -48,6 +48,7 @@ function readAuthSnapshot() {
 
 export function AuthProvider({ children }) {
   const [authState, setAuthState] = useState(() => readAuthSnapshot());
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     const profile = loadProfileSetupState();
@@ -56,10 +57,12 @@ export function AuthProvider({ children }) {
       profileSetupComplete: profile.completed || current.profileSetupComplete || false,
       profileSetupSkipped: profile.skipped || current.profileSetupSkipped || false,
     }));
+    setInitialized(true);
   }, []);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    // avoid persisting to storage until initial load has completed
+    if (typeof window === "undefined" || !initialized) return;
     const target = getStorageTarget(authState.rememberMe);
     const snapshot = {
       ...authState,
@@ -72,9 +75,10 @@ export function AuthProvider({ children }) {
     } else {
       removeStorage(window.localStorage, AUTH_STORAGE_KEY);
     }
-  }, [authState]);
+  }, [authState, initialized]);
 
   const login = (payload) => {
+    const profile = loadProfileSetupState();
     const rememberMe = Boolean(payload.rememberMe);
     const snapshot = {
       authenticated: true,
@@ -87,8 +91,11 @@ export function AuthProvider({ children }) {
       },
       token: payload.token || "jwt.placeholder.token",
       rememberMe,
-      profileSetupComplete: payload.profileSetupComplete ?? authState.profileSetupComplete ?? false,
-      profileSetupSkipped: payload.profileSetupSkipped ?? authState.profileSetupSkipped ?? false,
+      // prefer persisted profile setup state if present to avoid conflicting redirects
+      profileSetupComplete:
+        payload.profileSetupComplete ?? profile.completed ?? authState.profileSetupComplete ?? false,
+      profileSetupSkipped:
+        payload.profileSetupSkipped ?? profile.skipped ?? authState.profileSetupSkipped ?? false,
       lastLoginAt: new Date().toISOString(),
       role: payload.role || "member",
     };
@@ -97,6 +104,7 @@ export function AuthProvider({ children }) {
   };
 
   const register = (payload) => {
+    const profile = loadProfileSetupState();
     const snapshot = {
       authenticated: true,
       user: {
@@ -108,8 +116,9 @@ export function AuthProvider({ children }) {
       },
       token: payload.token || "jwt.placeholder.token",
       rememberMe: Boolean(payload.rememberMe),
-      profileSetupComplete: false,
-      profileSetupSkipped: false,
+      // preserve any persisted profile setup state if present
+      profileSetupComplete: payload.profileSetupComplete ?? profile.completed ?? false,
+      profileSetupSkipped: payload.profileSetupSkipped ?? profile.skipped ?? false,
       lastLoginAt: new Date().toISOString(),
       role: "member",
     };
@@ -168,6 +177,7 @@ export function AuthProvider({ children }) {
     () => ({
       ...authState,
       isAuthenticated: Boolean(authState.authenticated),
+      isAuthReady: initialized,
       login,
       register,
       logout,
@@ -175,7 +185,7 @@ export function AuthProvider({ children }) {
       skipProfileSetup,
       updateUser,
     }),
-    [authState]
+    [authState, initialized]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -50,10 +50,13 @@ export default function Checkout() {
               {cartItems.map((item) => (
                 <div key={item.id} className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
                   <div>
-                    <p className="font-medium">{item.title}</p>
+                    <p className="font-medium">{item.products?.name}</p>
                     <p className="text-sm text-white/65">Qty {item.quantity}</p>
                   </div>
-                  <p className="font-semibold">{formatPrice(item.price * item.quantity)}</p>
+                  <p className="font-semibold">{formatPrice(item.price * item.quantity)}formatPrice(
+  (item.products?.price || 0) *
+  item.quantity
+)</p>
                 </div>
               ))}
               {!cartItems.length && <p className="text-white/65">Your cart is empty.</p>}

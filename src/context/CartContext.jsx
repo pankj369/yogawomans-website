@@ -1,5 +1,10 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-
+import {
+  getCartItems,
+  addToCartApi,
+  updateCartItemApi,
+  removeCartItemApi,
+} from "../services/cartService";
 const CART_STORAGE_KEY = "yogawomans_cart";
 
 const CartContext = createContext(null);
@@ -16,35 +21,98 @@ function readStoredCart() {
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState(() => readStoredCart());
+  const fetchCart = async () => {
 
+  try {
+
+    const response = await getCartItems();
+
+    if (response?.cart) {
+
+      setCartItems(response.cart);
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Fetch cart error:",
+      error
+    );
+  }
+};
+useEffect(() => {
+
+  fetchCart();
+
+}, []);
   useEffect(() => {
     if (typeof window === "undefined") return;
     window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (product) => {
-    setCartItems((current) => {
-      const existing = current.find((item) => item.id === product.id);
-      if (existing) {
-        return current.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      }
-      return [...current, { ...product, quantity: 1 }];
-    });
-  };
+const addToCart = async (product) => {
 
-  const removeFromCart = (id) => {
-    setCartItems((current) => current.filter((item) => item.id !== id));
-  };
+  try {
 
-  const updateQuantity = (id, quantity) => {
-    setCartItems((current) =>
-      current
-        .map((item) => (item.id === id ? { ...item, quantity } : item))
-        .filter((item) => item.quantity > 0)
+    await addToCartApi(
+      product.id,
+      1
     );
-  };
+
+    await fetchCart();
+
+  } catch (error) {
+
+    console.error(
+      "Add cart error:",
+      error
+    );
+  }
+};
+
+const removeFromCart = async (id) => {
+
+  try {
+
+    await removeCartItemApi(id);
+
+    setCartItems((current) =>
+      current.filter(
+        (item) => item.id !== id
+      )
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Remove cart error:",
+      error
+    );
+  }
+};
+
+const updateQuantity = async (
+  id,
+  quantity
+) => {
+
+  try {
+
+    await updateCartItemApi(
+      id,
+      quantity
+    );
+
+    await fetchCart();
+
+  } catch (error) {
+
+    console.error(
+      "Update quantity error:",
+      error
+    );
+  }
+};
 
   const clearCart = () => setCartItems([]);
 
@@ -53,11 +121,17 @@ export function CartProvider({ children }) {
     [cartItems]
   );
 
-  const cartTotal = useMemo(
-    () => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
-    [cartItems]
-  );
-
+const cartTotal = useMemo(
+  () =>
+    cartItems.reduce(
+      (sum, item) =>
+        sum +
+        (item.products?.price || 0) *
+          item.quantity,
+      0
+    ),
+  [cartItems]
+);
   const value = {
     cartItems,
     cartCount,

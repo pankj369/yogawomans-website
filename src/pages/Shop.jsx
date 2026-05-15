@@ -8,7 +8,10 @@ import { useCart } from "../context/CartContext";
 import { useToast } from "../context/ToastContext";
 import { useDashboard } from "../context/DashboardContext";
 import { useWishlist } from "../context/WishlistContext";
-import { categories, products } from "../data/products";
+import {
+  getAllProducts,
+  getAllCategories,
+} from "../services/productService";
 
 function formatPrice(price) {
   return new Intl.NumberFormat("en-IN", {
@@ -181,8 +184,8 @@ function CartDrawer({ open, onClose }) {
                       className="flex gap-4 rounded-[22px] border border-white/10 bg-white/5 p-4"
                     >
                       <img
-                        src={item.image}
-                        alt={item.title}
+                        src={item.products?.image_url}
+                        alt={item.products?.name}
                         className="h-24 w-24 rounded-2xl object-cover"
                       />
                       <div className="min-w-0 flex-1">
@@ -190,7 +193,7 @@ function CartDrawer({ open, onClose }) {
                           <div>
                             <p className="truncate font-semibold">{item.title}</p>
                             <p className="mt-1 text-xs uppercase tracking-[0.16em] text-white/45">
-                              {item.category}
+                              {item.products?.category || "Wellness"}
                             </p>
                           </div>
                           <button
@@ -223,7 +226,10 @@ function CartDrawer({ open, onClose }) {
                             </button>
                           </div>
                           <span className="text-sm font-semibold text-amber-200">
-                            {formatPrice(item.price * item.quantity)}
+                            formatPrice(
+  (item.products?.price || 0) *
+  item.quantity
+)
                           </span>
                         </div>
                       </div>
@@ -279,25 +285,95 @@ export default function Shop() {
   const [category, setCategory] = useState("All");
   const [cartOpen, setCartOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 900);
-    return () => clearTimeout(timer);
-  }, []);
+const [categories, setCategories] = useState([]);
 
-  const filteredProducts = useMemo(() => {
-    const query = search.trim().toLowerCase();
-    return products.filter((product) => {
-      const categoryMatch = category === "All" || product.category === category;
-      const searchMatch =
-        !query ||
-        product.title.toLowerCase().includes(query) ||
-        product.category.toLowerCase().includes(query) ||
-        product.description.toLowerCase().includes(query);
-      return categoryMatch && searchMatch;
-    });
-  }, [search, category]);
+const [error, setError] = useState("");
 
+useEffect(() => {
+
+  const fetchShopData = async () => {
+
+    try {
+
+      setLoading(true);
+
+      const [productsResponse, categoriesResponse] = await Promise.all([
+        getAllProducts(),
+        getAllCategories(),
+      ]);
+
+
+
+      const transformedProducts = productsResponse.products.map((product) => ({
+        id: product.id,
+        title: product.name,
+        description: product.description,
+        price: product.price,
+        image: product.image_url,
+        category: product.categories?.name || "Wellness",
+        accent: "from-[#1B2A1F] via-[#2E4735] to-[#E8651A]",
+        rating: 4.8,
+        reviews: 120,
+        premium: product.is_featured,
+        slug: product.slug,
+        stock: product.stock,
+      }));
+
+
+
+      const transformedCategories = [
+        "All",
+        ...categoriesResponse.categories.map((category) => category.name),
+      ];
+
+
+
+      setProducts(transformedProducts);
+
+      setCategories(transformedCategories);
+
+    } catch (error) {
+
+      console.error(error);
+
+      setError("Failed to load shop data");
+
+    } finally {
+
+      setLoading(false);
+    }
+  };
+
+
+
+  fetchShopData();
+
+}, []);
+
+const filteredProducts = useMemo(() => {
+
+  if (!products.length) return [];
+
+  const query = search.trim().toLowerCase();
+
+  return products.filter((product) => {
+
+    const categoryMatch =
+      category === "All" ||
+      product.category?.toLowerCase() === category.toLowerCase();
+
+    const searchMatch =
+      !query ||
+      product.title?.toLowerCase().includes(query) ||
+      product.category?.toLowerCase().includes(query) ||
+      product.description?.toLowerCase().includes(query);
+
+    return categoryMatch && searchMatch;
+  });
+
+}, [products, search, category]);
   const handleBuyNow = (product) => {
     if (product.premium && dashboardState.activePlan !== "Pro") {
       navigate("/pricing");
@@ -422,7 +498,7 @@ export default function Shop() {
                         navigate("/pricing");
                         return;
                       }
-                      navigate(`/shop/${product.id}`);
+                      navigate(`/shop/${product.slug}`);
                     }}
                     onToggleWishlist={toggleWishlist}
                     isWishlisted={isWishlisted(product.id)}

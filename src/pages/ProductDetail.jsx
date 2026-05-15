@@ -1,10 +1,11 @@
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
+import { getSingleProduct } from "../services/productService";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { useDashboard } from "../context/DashboardContext";
 import { useWishlist } from "../context/WishlistContext";
-import { products } from "../data/products";
+
 
 function formatPrice(price) {
   return new Intl.NumberFormat("en-IN", {
@@ -15,18 +16,93 @@ function formatPrice(price) {
 }
 
 export default function ProductDetail() {
-  const { productId } = useParams();
+  const { slug } = useParams();
+  const [product, setProduct] = useState(null);
+
+const [loading, setLoading] = useState(true);
+
+const [error, setError] = useState("");
+
+
+
   const navigate = useNavigate();
   const auth = useAuth();
   const { state: dashboardState } = useDashboard();
   const { addToCart } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
+useEffect(() => {
 
-  const product = useMemo(() => products.find((item) => item.id === productId), [productId]);
+  const fetchProduct = async () => {
 
-  if (!product) {
-    return <Navigate to="/shop" replace />;
-  }
+    try {
+
+      setLoading(true);
+
+      const response = await getSingleProduct(slug);
+
+      const backendProduct = response.product;
+
+      const transformedProduct = {
+        id: backendProduct.id,
+        title: backendProduct.name,
+        description: backendProduct.description,
+        price: backendProduct.price,
+        image: backendProduct.image_url,
+        category: backendProduct.categories?.name || "Wellness",
+        premium: backendProduct.is_featured,
+        slug: backendProduct.slug,
+        stock: backendProduct.stock,
+        rating: 4.8,
+        tags: [
+          backendProduct.categories?.name,
+          "Wellness",
+          "Yoga",
+        ],
+      };
+
+      setProduct(transformedProduct);
+
+    } catch (error) {
+
+      console.error(error);
+
+      setError("Failed to load product");
+
+    } finally {
+
+      setLoading(false);
+    }
+  };
+
+
+
+  fetchProduct();
+
+}, [slug]);
+
+if (loading) {
+  return (
+    <div className="flex min-h-screen items-center justify-center text-xl font-semibold">
+      Loading product...
+    </div>
+  );
+}
+
+
+
+if (error) {
+  return (
+    <div className="flex min-h-screen items-center justify-center text-xl font-semibold text-red-500">
+      {error}
+    </div>
+  );
+}
+
+
+
+if (!product) {
+  return <Navigate to="/shop" replace />;
+}
 
   const goCheckout = () => {
     if (product.premium && dashboardState.activePlan !== "Pro") {

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { loginUser } from "../services/authService";
 import {
   AuthInput,
   AuthLayout,
@@ -13,21 +14,28 @@ import {
 } from "./AuthShared";
 
 function LoginForm({ onForgot, onSuccess }) {
-  const [form, setForm] = useState({ email: "", password: "", phone: "" });
+  const [form, setForm] = useState({ email: "", password: ""});
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
 
   const validate = () => {
-    const e = {};
-    if (!form.email) e.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(form.email)) e.email = "Enter a valid email";
-    if (!form.phone) e.phone = "Contact number is required";
-    else if (!/^[6-9]\d{9}$/.test(form.phone.replace(/\s+/g, "")))
-      e.phone = "Enter a valid 10-digit mobile number";
-    if (!form.password) e.password = "Password is required";
-    return e;
-  };
+  const e = {};
+
+  if (!form.email) {
+    e.email = "Email is required";
+  } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+    e.email = "Enter a valid email";
+  }
+
+  if (!form.password) {
+    e.password = "Password is required";
+  }
+
+  return e;
+};
+
+  const [apiError, setApiError] = useState("");
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
@@ -37,13 +45,35 @@ function LoginForm({ onForgot, onSuccess }) {
       return;
     }
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1400));
-    setLoading(false);
-    onSuccess({
-      email: form.email,
-      password: form.password,
-      rememberMe,
-    });
+    setApiError("");
+
+    try {
+      const response = await loginUser({
+        email: form.email,
+        password: form.password,
+      });
+
+      if (response.success) {
+        onSuccess({
+          email: response.user?.email || form.email,
+          token: response.token,
+          rememberMe,
+          id: response.user?.id,
+          name: response.user?.name || form.email.split("@")[0],
+        });
+      } else {
+        setApiError(response.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setApiError(
+        error.response?.data?.message ||
+        error.message ||
+        "Unable to connect to server. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const set = (k) => (ev) => {
@@ -72,60 +102,6 @@ function LoginForm({ onForgot, onSuccess }) {
       </div>
 
       <div className="auth-field">
-        <label className="auth-label">Contact Number</label>
-        <div className="auth-input-wrap" style={{ display: "flex", alignItems: "center" }}>
-          <span className="auth-input-icon">📞</span>
-          <span
-            style={{
-              position: "absolute",
-              left: 42,
-              top: "50%",
-              transform: "translateY(-50%)",
-              fontSize: 14,
-              fontWeight: 700,
-              color: "#2E7D32",
-              borderRight: "1.5px solid rgba(46,125,50,0.25)",
-              paddingRight: 10,
-              lineHeight: 1,
-              pointerEvents: "none",
-              fontFamily: "'Poppins',sans-serif",
-            }}
-          >
-            +91
-          </span>
-          <input
-            name="phone"
-            type="tel"
-            placeholder="Enter 10-digit mobile number"
-            value={form.phone}
-            onChange={(e) => {
-              const val = e.target.value.replace(/\D/g, "").slice(0, 10);
-              set("phone")({ target: { value: val } });
-            }}
-            autoComplete="tel"
-            maxLength={10}
-            className={`auth-input${errors.phone ? " error" : form.phone ? " success" : ""}`}
-            style={{ paddingLeft: 80 }}
-          />
-        </div>
-        {form.phone && (
-          <span
-            style={{
-              fontFamily: "'Lato',sans-serif",
-              fontSize: 11,
-              color: /^[6-9]\d{9}$/.test(form.phone) ? "#2E7D32" : "#aaa",
-              marginTop: 4,
-              display: "block",
-            }}
-          >
-            {form.phone.length}/10 digits
-            {/^[6-9]\d{9}$/.test(form.phone) ? " ✅" : ""}
-          </span>
-        )}
-        {errors.phone && <span className="auth-error-msg">⚠ {errors.phone}</span>}
-      </div>
-
-      <div className="auth-field">
         <label className="auth-label">Password</label>
         <AuthInput
           icon="🔒"
@@ -139,6 +115,12 @@ function LoginForm({ onForgot, onSuccess }) {
         />
         {errors.password && <span className="auth-error-msg">⚠ {errors.password}</span>}
       </div>
+
+      {apiError && (
+        <div className="auth-error-banner">
+          <span>⚠️ {apiError}</span>
+        </div>
+      )}
 
       <div className="auth-check-row">
         <input
@@ -389,12 +371,13 @@ export default function Login() {
     setView("reset");
   };
   const showResetOk = () => setView("reset-success");
-  const handleAuthSuccess = ({ email, password, rememberMe }) => {
+  const handleAuthSuccess = ({ email, token, rememberMe, id, name }) => {
     const session = auth.login({
       email,
-      password,
+      token,
       rememberMe,
-      name: email.split("@")[0],
+      id,
+      name,
     });
     navigate(session.profileSetupComplete ? "/dashboard" : "/profile-setup", { replace: true });
   };

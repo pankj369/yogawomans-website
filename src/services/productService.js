@@ -1,13 +1,60 @@
 import apiClient from "./apiClient";
 
-export const productService = {
-  listProducts(params) {
-    return apiClient.get("/products", { params });
-  },
-  getProduct(id) {
-    return apiClient.get(`/products/${id}`);
-  },
-  createOrder(payload) {
-    return apiClient.post("/orders", payload);
-  },
+
+
+// GET ALL PRODUCTS
+export const getAllProducts = async () => {
+
+  try {
+
+    const response = await apiClient.get("/products");
+
+    return response.data;
+
+  } catch (error) {
+
+    console.error("Get Products Error:", error);
+
+    throw error;
+  }
+};
+
+
+
+
+// GET SINGLE PRODUCT
+export const getSingleProduct = async (slug) => {
+
+  try {
+
+    const response = await apiClient.get(`/products/${slug}`);
+
+    return response.data;
+
+  } catch (error) {
+
+    console.error("Get Single Product Error:", error);
+
+    throw error;
+  }
+};
+
+
+
+
+// GET CATEGORIES
+export const getAllCategories = async () => {
+
+  try {
+
+    const response = await apiClient.get("/categories");
+
+    return response.data;
+
+  } catch (error) {
+
+    console.error("Get Categories Error:", error);
+
+    throw error;
+  }
 };

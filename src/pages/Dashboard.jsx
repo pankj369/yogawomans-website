@@ -148,6 +148,26 @@ export default function Dashboard() {
   const { section = "home" } = useParams();
   const navigate = useNavigate();
   const auth = useAuth();
+if (auth.profileLoading) {
+  return (
+    <div className="flex min-h-screen items-center justify-center text-xl font-semibold">
+      Loading dashboard...
+    </div>
+  );
+}
+const profile = auth.profile;
+
+const userName =
+  profile?.full_name ||
+  "Yogi";
+
+const wellnessGoal =
+  profile?.wellness_goal ||
+  "Wellness";
+
+const yogaStyle =
+  profile?.preferred_yoga_style ||
+  "Yoga";
   const toast = useToast();
   const {
     state,
@@ -195,9 +215,8 @@ export default function Dashboard() {
     : [];
 
   return (
-    <DashboardLayout userName={auth.user?.name || "Yoga Member"} title={activeSection.title} query={query} onQueryChange={setQuery}>
-      <HeroBanner
-        userName={auth.user?.name || "Yoga Member"}
+    <DashboardLayout userName={userName} title={activeSection.title} query={query} onQueryChange={setQuery}>
+      <HeroBanner userName={userName}
         lastSession={lastSession}
         onResumeSession={handleResume}
         onExplorePrograms={handleExplore}
@@ -220,7 +239,49 @@ export default function Dashboard() {
           ))}
         </div>
       </div>
+<div className="rounded-[2rem] border border-white/60 bg-white/60 p-5 shadow-[0_20px_80px_rgba(72,42,8,0.08)] backdrop-blur-2xl sm:p-6">
+  <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#8b6c48]">
+    Your Wellness Profile
+  </p>
 
+  <h2 className="mt-2 text-2xl font-heading font-extrabold text-[#1a1a1a]">
+    Personalized Journey 🌿
+  </h2>
+
+  <div className="mt-5 grid gap-4 sm:grid-cols-3">
+
+    <div className="rounded-2xl bg-[#faf4ec] p-4">
+      <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8b6c48]">
+        Name
+      </p>
+
+      <p className="mt-2 text-lg font-semibold text-[#1a1a1a]">
+        {userName}
+      </p>
+    </div>
+
+    <div className="rounded-2xl bg-[#faf4ec] p-4">
+      <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8b6c48]">
+        Wellness Goal
+      </p>
+
+      <p className="mt-2 text-lg font-semibold text-[#1a1a1a]">
+        {wellnessGoal}
+      </p>
+    </div>
+
+    <div className="rounded-2xl bg-[#faf4ec] p-4">
+      <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8b6c48]">
+        Yoga Style
+      </p>
+
+      <p className="mt-2 text-lg font-semibold text-[#1a1a1a]">
+        {yogaStyle}
+      </p>
+    </div>
+
+  </div>
+</div>
       {query.trim() && (
         <section className="rounded-[2rem] border border-white/60 bg-white/60 p-5 shadow-[0_20px_80px_rgba(72,42,8,0.08)] backdrop-blur-2xl sm:p-6">
           <div className="mb-4 flex items-center justify-between">
